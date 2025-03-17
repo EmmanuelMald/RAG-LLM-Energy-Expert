@@ -4,14 +4,22 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
+dependencies = []
+
+[dependency-groups]
+gcp = [
+    "google-cloud-storage>=3.1.0",
+]
+notebooks = [
     "dotenv>=0.9.9",
     "ipykernel>=6.29.5",
-    "litellm>=1.63.11",
-    "matplotlib>=3.10.1",
-    "numpy>=2.2.4",
-    "pandas>=2.2.3",
+]
+general-dev = [
+    "loguru>=0.7.3",
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.1",
-    "seaborn>=0.13.2",
+]
+llm = [
+    "litellm>=1.63.11",
+    "pypdf2>=3.0.1",
 ]
