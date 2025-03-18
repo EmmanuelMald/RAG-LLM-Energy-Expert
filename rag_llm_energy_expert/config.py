@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 
 class GCP_CONFIG(BaseSettings):
-    PROJECT_ID: str = "natural-reserve-454018-j9"
+    PROJECT_ID: str = "learned-stone-454021-c8"
     DEV_SA: SecretStr = SecretStr("mock_dev_service_account")
     BUCKET_NAME: str = "rag_llm_energy_expert"
     REGION: str = "northamerica-south1"
