@@ -6,5 +6,5 @@ gcloud-auth:
 	gcloud config unset auth/impersonate_service_account
 	gcloud auth application-default login --impersonate-service-account $(GCP_SA)
 	
-sync-dependencies:
+uv-sync:
 	uv sync --all-groups
