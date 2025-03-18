@@ -1,5 +1,4 @@
 from google.cloud import secretmanager
-import google_crc32c 
 from typing import Union
 from loguru import logger
 import sys
