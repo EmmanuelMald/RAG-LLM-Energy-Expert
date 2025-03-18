@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Folder where experimental data is stored
+/data
+
 # C extensions
 *.so
 
