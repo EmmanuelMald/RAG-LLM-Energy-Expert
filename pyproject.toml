@@ -21,6 +21,7 @@ general-dev = [
     "loguru>=0.7.3",
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.1",
+    "ruff>=0.11.0",
 ]
 llm = [
     "litellm>=1.63.11",
