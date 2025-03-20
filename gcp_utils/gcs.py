@@ -176,7 +176,11 @@ def delete_file(file_name: str, bucket_name: str = config.BUCKET_NAME) -> None:
 
 
 
-def download_file(gcs_file_path: str, local_file_path: str, bucket_name: str = config.BUCKET_NAME):
+def download_file(
+        gcs_file_path: str, 
+        local_file_path: str, 
+        bucket_name: str = config.BUCKET_NAME
+        ) -> None:
     """
     Download a file stored in a bucket of GCS into a local path.
 
@@ -208,4 +212,29 @@ def download_file(gcs_file_path: str, local_file_path: str, bucket_name: str = c
     logger.info(f"file {gcs_file_path} downloaded in {local_file_path}")
 
 
+def get_file(
+        gcs_file_path: str, 
+        bucket_name: str = config.BUCKET_NAME,
+        ) -> bytes:
+    """
+    Download a file stored in GCS directly in memory to be processed.
+
+    Args:
+        gcs_file_path: str -> Path to the file. ex: "my_folder/file.txt"
+        bucket_name: str -> The GCS bucket where the file is stored. ex: "my_bucket"
+
+    Return:
+        bytes -> Bytes of the file
+    """
+    # blob_exists already has error handlers
+    if not blob_exists(gcs_file_path, bucket_name):
+        raise ValueError(f"{gcs_file_path} does not exists. Check the path and "
+                         "try again")
     
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(gcs_file_path)
+    
+    memory_blob = blob.download_as_bytes()
+
+    return memory_blob 
+
