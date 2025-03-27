@@ -32,5 +32,5 @@ llm = [
     "llama-index-readers-file>=0.4.6",
     "pymupdf4llm>=0.0.17",
     "pypdf2>=3.0.1",
-    "sentence-transformers>=3.4.1",
+    "sentence-transformers>=4.0.1",
 ]
