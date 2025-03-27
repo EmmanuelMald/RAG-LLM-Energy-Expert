@@ -159,6 +159,34 @@ def upload_file(
         f"{origin_file_path.split('/')[-1]} stored in GCS as {destination_file_path}"
     )
 
+def upload_file_from_memory(
+        blob_name:str,
+        string_data: str,
+        bucket_name: str = config.BUCKET_NAME,
+) -> None:
+    """
+    Uploading from memory is useful for when you want to avoid unnecessary writes from memory 
+    to your local file system.
+
+    Args:
+        blob_name: str -> Path + name of the file to be stored. ex: "my_folder/my_file.txt"
+        string_data: str -> Data to be stored in GCS. Must be converted to string
+        bucket_name: str -> Name of the GCS bucket. ex: "my_bucket"
+    
+    Return:
+        None
+    """
+    if not bucket_exists(bucket_name):
+        raise ValueError(f"The bucket {bucket_name} does not exists")
+    if not isinstance(string_data, str) or not isinstance(blob_name, str):
+        raise ValueError("The parameters string_data and blob_name must be string types")
+    
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    blob.upload_from_string(string_data)
+    
+    logger.info("In-memory data successfully stored in GCS bucket")
+    
 
 def delete_file(file_name: str, bucket_name: str = config.BUCKET_NAME) -> None:
     """
