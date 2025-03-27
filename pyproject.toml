@@ -25,7 +25,11 @@ general-dev = [
     "ruff>=0.11.0",
 ]
 llm = [
+    "langchain-text-splitters>=0.3.7",
     "litellm>=1.63.11",
+    "llama-cloud-services>=0.6.6",
+    "llama-index-core>=0.12.25",
+    "llama-index-readers-file>=0.4.6",
     "pymupdf4llm>=0.0.17",
     "pypdf2>=3.0.1",
     "sentence-transformers>=3.4.1",
