@@ -163,11 +163,14 @@ def prepare_chunks_for_embeddings(
             raise ValueError(f"file_data parameter must contain the next keys: {mandatory_file_data_keys}")
     
     logger.info("Creating additional metadata")
+    
+    # Add the datetime of when the chunks were created
     extra_metadata = {
         "upload_date": datetime.now().strftime(r"%Y-%m%d %H:%M:%S"),
-        "title": file_data["title"],
-        "storage_path": file_data["gcs_path"],
     }
+
+    # Add all the metadata in file_data to extra_metadata 
+    extra_metadata.update(file_data)
 
     # Creating a list of dictionaries, each entry of the list is the metadata of each chunk
     logger.info("Extracting chunk's metadata")
