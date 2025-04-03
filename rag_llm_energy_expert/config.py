@@ -8,5 +8,9 @@ class GCP_CONFIG(BaseSettings):
     BUCKET_NAME: str = "rag_llm_energy_expert"
     REGION: str = "northamerica-south1"
 
+
 class LLM_CONFIG(BaseSettings):
-    OPENAI_API_KEY: SecretStr = SecretStr("mock_openai_api_key")
+    OPENAI_SECRET_ID: SecretStr = SecretStr("mock_openai_secret_id")
+    OPENAI_VERSION_ID: SecretStr = SecretStr("mock_openai_version_id")
+    LLAMA_SECRET_ID: SecretStr = SecretStr("mock_llama_secret_id")
+    LLAMA_VERSION_ID: SecretStr = SecretStr("mock_llama_version_id")

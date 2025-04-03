@@ -8,6 +8,8 @@ dependencies = []
 
 [dependency-groups]
 gcp = [
+    "gcsfs>=2025.3.0",
+    "google-cloud-run>=0.10.17",
     "google-cloud-secret-manager>=2.23.2",
     "google-cloud-storage>=3.1.0",
 ]
@@ -17,10 +19,18 @@ notebooks = [
 ]
 general-dev = [
     "loguru>=0.7.3",
+    "pre-commit>=4.2.0",
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.1",
+    "ruff>=0.11.0",
 ]
 llm = [
+    "langchain-text-splitters>=0.3.7",
     "litellm>=1.63.11",
+    "llama-cloud-services>=0.6.6",
+    "llama-index-core>=0.12.25",
+    "llama-index-readers-file>=0.4.6",
+    "pymupdf4llm>=0.0.17",
     "pypdf2>=3.0.1",
+    "sentence-transformers>=4.0.1",
 ]
