@@ -166,7 +166,7 @@ def prepare_chunks_for_embeddings(
     
     # Add the datetime of when the chunks were created
     extra_metadata = {
-        "upload_date": datetime.now().strftime(r"%Y-%m%d %H:%M:%S"),
+        "upload_date": datetime.now().strftime(r"%Y-%m-%d %H:%M:%S"),
     }
 
     # Add all the metadata in file_data to extra_metadata 
