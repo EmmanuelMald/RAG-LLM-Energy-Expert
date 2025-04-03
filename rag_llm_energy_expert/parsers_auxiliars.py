@@ -23,7 +23,7 @@ def extract_pdf_content(
         bucket_path: str -> Name of the gcs bucket. Ex: "my_bucket"
 
     Return:
-        str -> String with all the pdf parsed in a markdown format
+        file_data: dict[str, str] -> Dictionary with all the pdf parsed in a markdown format and metadata
     """
     # blob_exists already has error handlers for the parameters
     if not blob_exists(gcs_file_path, bucket_name):
@@ -102,17 +102,17 @@ def chunk_by_md_headers(
     return md_headers_chunks
 
 
-def size_md_chunks(md_headers_chunks: list, chunk_size: int, chunk_overlap: int = 0):
+def size_md_chunks(md_headers_chunks: list, chunk_size: int, chunk_overlap: int = 0,) -> list:
     """
     Once the text has been chunked by the markdown headers, its time to split each chunk even more based on the
     embedding model specifics.
 
     Args:
+        md_headers_chunks: list[Document] -> List of chunks (Documents) splitter by markdown headers
         chunk_size: int -> Number of tokens to split the md chunks
         chunk_overlap: int -> Number of tokens that will be overlapped on each chunk
-    
     Returns:
-
+        chunks_sized: list[Document] -> List of chunks (Documents) splitted by the chunk size
     """
     logger.info("Sizing markdown chunks...")
 

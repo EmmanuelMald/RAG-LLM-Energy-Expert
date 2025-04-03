@@ -56,6 +56,9 @@ def parse_file(gcs_file_path: str,
     # Step 3: Chunk the md_headers_chunks into smaller ones based on the chunk_size and overlap params
     chunks_sized = size_md_chunks(md_headers_chunks = md_headers_chunks, chunk_size = chunk_size, chunk_overlap = chunk_overlap)
 
+    # Add the chunk_size to the metadata
+    file_data["chunk_size"] = chunk_size
+
     # Step 4: Prepare the chunks to be embedded.
     # Returns a dictionary which each entry is a chunk 
     chunks_to_embed = prepare_chunks_for_embeddings(chunks_sized=chunks_sized, file_data=file_data)
@@ -63,7 +66,7 @@ def parse_file(gcs_file_path: str,
     # Step 5: Store chunks into GCP
     logger.info("Storing chunks in GCP...")
     current_date = datetime.now().strftime(r"%Y-%m-%d_%H:%M:%S")
-    storage_file_path = f"chunks/{file_data['title']}_{current_date}.txt"
+    storage_file_path = f"chunks/{file_data['title']}_{chunk_size}_{current_date}.txt"
     
     chunks_to_store = {f"chunk{i}": chunk for i, chunk in enumerate(chunks_to_embed)}
 
