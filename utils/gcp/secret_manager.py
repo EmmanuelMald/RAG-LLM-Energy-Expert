@@ -5,16 +5,11 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.config import GCP_CONFIG
-
-# Get configuration values
-config = GCP_CONFIG()
-
 # Create a SecretManager Client
 client = secretmanager.SecretManagerServiceClient()
 
 
-def secret_exists(secret_id: str, project_id: str = config.PROJECT_ID) -> None:
+def secret_exists(secret_id: str, project_id: str) -> None:
     """
     Checks if a secret already exists
 
@@ -48,7 +43,7 @@ def secret_exists(secret_id: str, project_id: str = config.PROJECT_ID) -> None:
 def secret_version_exists(
     secret_id: str,
     version_id: Union[str, int],
-    project_id: str = config.PROJECT_ID,
+    project_id: str,
 ):
     """
     Return True if a version of a secret exists
@@ -85,7 +80,7 @@ def secret_version_exists(
 def create_secret(
     secret_id: str,
     secret_value: str,
-    project_id: str = config.PROJECT_ID,
+    project_id: str,
 ) -> None:
     """
     Creates a secret on SecretManager.
@@ -128,7 +123,9 @@ def create_secret(
 
 
 def get_secret(
-    secret_id: str, version_id: Union[int, str], project_id: str = config.PROJECT_ID
+    secret_id: str,
+    version_id: Union[int, str],
+    project_id: str,
 ) -> str:
     """
     Get a secret from secretmanager
@@ -161,7 +158,7 @@ def get_secret(
 def destroy_secret_version(
     secret_id: str,
     version_id: str,
-    project_id: str = config.PROJECT_ID,
+    project_id: str,
 ):
     """
     Destroy a secret version.
@@ -187,7 +184,10 @@ def destroy_secret_version(
     logger.info(f"Secret version destroyed: {response.name}")
 
 
-def delete_secret(secret_id: str, project_id: str = config.PROJECT_ID):
+def delete_secret(
+    secret_id: str,
+    project_id: str,
+):
     """
     Deleting a secret is an irreversible operation.
     Deletes a secret and all its versions.
@@ -211,7 +211,9 @@ def delete_secret(secret_id: str, project_id: str = config.PROJECT_ID):
 
 
 def add_secret_version(
-    secret_id: str, secret_value: str, project_id: str = config.PROJECT_ID
+    secret_id: str,
+    secret_value: str,
+    project_id: str,
 ) -> None:
     """
     Add a new version to a secret_id. Adding a new version means set a new
