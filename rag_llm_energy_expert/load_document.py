@@ -11,7 +11,7 @@ from rag_llm_energy_expert.parsers_auxiliars import (
     prepare_chunks_for_embeddings,
 )
 from rag_llm_energy_expert.config import GCP_CONFIG
-from gcp_utils.gcs import upload_file_from_memory
+from utils.gcp_utils.gcs import upload_file_from_memory
 
 # Initialize GCP config values
 gcp_config = GCP_CONFIG()

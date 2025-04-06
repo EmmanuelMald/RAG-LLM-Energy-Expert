@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import sys
 
-sys.path.append("..")
+sys.path.append("../..")
 
 from rag_llm_energy_expert.config import GCP_CONFIG
 
