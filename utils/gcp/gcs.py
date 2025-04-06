@@ -159,7 +159,7 @@ def upload_file_from_memory(
         blob_name:str,
         string_data: str,
         bucket_name: str ,
-) -> None:
+) -> None: 
     """
     Uploading from memory is useful for when you want to avoid unnecessary writes from memory 
     to your local file system.
