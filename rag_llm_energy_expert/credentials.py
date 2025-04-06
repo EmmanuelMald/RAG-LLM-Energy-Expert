@@ -17,9 +17,11 @@ def get_qdrant_config() -> QDRANT_CONFIG:
     Return:
         QDRANT_CONFIG instance
     """
+    qdrant = QDRANT_CONFIG()
+
     # Get secret id and version id
-    secret_id = QDRANT_CONFIG.SECRET_ID
-    version_id = QDRANT_CONFIG.VERSION_ID
+    secret_id = qdrant.SECRET_ID
+    version_id = qdrant.VERSION_ID
 
     # Get api_key
     api_key = SecretStr(get_secret(secret_id, version_id))
