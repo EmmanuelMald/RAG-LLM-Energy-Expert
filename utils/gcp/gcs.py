@@ -5,10 +5,6 @@ import sys
 
 sys.path.append("../..")
 
-from rag_llm_energy_expert.config import GCP_CONFIG
-
-# Load configuration of the GCP project
-config = GCP_CONFIG()
 
 # Create a general storage client
 client = storage.Client()
@@ -65,7 +61,7 @@ def blob_exists(blob_name: str, bucket_name: str) -> bool:
 
 
 def create_bucket(
-    bucket_name: str, location: str = config.REGION
+    bucket_name: str, location: str 
 ) -> storage.Client.bucket:
     """
     Create a new bucket on GCP
@@ -108,8 +104,8 @@ def delete_bucket(bucket_name: str) -> None:
 
 def upload_file(
     origin_file_path: str,
+    bucket_name: str,
     destination_file_path: str = None,
-    bucket_name: str = config.BUCKET_NAME,
 ):
     """
     Upload a local file into a GCS bucket.
@@ -162,7 +158,7 @@ def upload_file(
 def upload_file_from_memory(
         blob_name:str,
         string_data: str,
-        bucket_name: str = config.BUCKET_NAME,
+        bucket_name: str ,
 ) -> None:
     """
     Uploading from memory is useful for when you want to avoid unnecessary writes from memory 
@@ -188,7 +184,7 @@ def upload_file_from_memory(
     logger.info("In-memory data successfully stored in GCS bucket")
     
 
-def delete_file(file_name: str, bucket_name: str = config.BUCKET_NAME) -> None:
+def delete_file(file_name: str, bucket_name: str ) -> None:
     """
     Delete a file from a bucket
 
@@ -211,7 +207,7 @@ def delete_file(file_name: str, bucket_name: str = config.BUCKET_NAME) -> None:
 
 
 def download_file(
-    gcs_file_path: str, local_file_path: str, bucket_name: str = config.BUCKET_NAME
+    gcs_file_path: str, local_file_path: str, bucket_name: str 
 ) -> None:
     """
     Download a file stored in a bucket of GCS into a local path.
@@ -246,7 +242,7 @@ def download_file(
 
 def get_file(
     gcs_file_path: str,
-    bucket_name: str = config.BUCKET_NAME,
+    bucket_name: str ,
 ) -> bytes:
     """
     Download a file stored in GCS directly in memory to be processed.
