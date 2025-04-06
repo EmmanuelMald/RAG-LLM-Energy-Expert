@@ -1,5 +1,4 @@
 from loguru import logger
-from datetime import datetime
 import json
 import sys
 
@@ -65,8 +64,8 @@ def parse_file(gcs_file_path: str,
 
     # Step 5: Store chunks into GCP
     logger.info("Storing chunks in GCP...")
-    current_date = datetime.now().strftime(r"%Y-%m-%d_%H:%M:%S")
-    storage_file_path = f"chunks/{file_data['title']}_{chunk_size}_{current_date}.txt"
+    upload_date = chunks_to_embed[0]["upload_date"]
+    storage_file_path = f"chunks/{file_data['title']}_{chunk_size}_{upload_date}.txt"
     
     chunks_to_store = {f"chunk{i}": chunk for i, chunk in enumerate(chunks_to_embed)}
 
