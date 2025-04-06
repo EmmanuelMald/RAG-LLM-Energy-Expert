@@ -7,7 +7,7 @@ from loguru import logger
 
 sys.path.append("..")
 
-from utils.gcp_utils.gcs import get_file, blob_exists
+from utils.gcp.gcs import get_file, blob_exists
 
 
 
