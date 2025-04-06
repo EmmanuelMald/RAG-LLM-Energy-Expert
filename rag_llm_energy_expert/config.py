@@ -14,6 +14,14 @@ class LLM_CONFIG(BaseSettings):
     OPENAI_VERSION_ID: SecretStr = SecretStr("mock_openai_version_id")
     LLAMA_SECRET_ID: SecretStr = SecretStr("mock_llama_secret_id")
     LLAMA_VERSION_ID: SecretStr = SecretStr("mock_llama_version_id")
-    QDRANT_URL: str = "https://6bc62d49-364d-4a8b-82b5-9908cbb26d4e.us-east4-0.gcp.cloud.qdrant.io"
-    QDRANT_SECRET_ID: str = "QDRANT-KEY"
-    QDRANT_VERSION_ID: str = "1"
+
+
+class QDRANT_CONFIG(BaseSettings):
+    URL: str = (
+        "https://6bc62d49-364d-4a8b-82b5-9908cbb26d4e.us-east4-0.gcp.cloud.qdrant.io"
+    )
+    SECRET_ID: str = "QDRANT-KEY"
+    VERSION_ID: str = "1"
+    API_KEY: SecretStr = SecretStr("")
+    COLLECTION_NAME: str = "energy_expert"
+    COLLECTION_VERSION: str = "v1"
