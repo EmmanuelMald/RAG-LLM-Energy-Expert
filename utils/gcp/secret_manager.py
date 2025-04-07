@@ -1,5 +1,6 @@
 from google.cloud import secretmanager
 from typing import Union
+from pydantic import SecretStr
 from loguru import logger
 import sys
 
@@ -137,7 +138,7 @@ def get_secret(
         version_id: Union[int, str] -> Version of the secret
 
     Return:
-        str -> string with the version of the secret
+        SecretStr -> string with the version of the secret
     """
     # secret_version_exists contains error handlers for all the parameters
     if not secret_version_exists(secret_id, version_id, project_id):
@@ -150,7 +151,7 @@ def get_secret(
     response = client.access_secret_version(request={"name": name})
 
     # Get the payload of the response
-    payload = response.payload.data.decode("UTF-8")
+    payload = SecretStr(response.payload.data.decode("UTF-8"))
 
     return payload
 

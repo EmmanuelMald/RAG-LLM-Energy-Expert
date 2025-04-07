@@ -1,4 +1,3 @@
-from pydantic import SecretStr
 import sys
 
 sys.path.append("..")
@@ -26,6 +25,6 @@ def get_qdrant_config() -> QDRANT_CONFIG:
     version_id = qdrant.VERSION_ID
 
     # Get api_key
-    api_key = SecretStr(get_secret(secret_id, version_id, gcp_config.PROJECT_ID))
+    api_key = get_secret(secret_id, version_id, gcp_config.PROJECT_ID)
 
     return QDRANT_CONFIG(API_KEY=api_key)
