@@ -131,22 +131,28 @@ def create_points(
     logger.info("Downloading chunks...")
 
     # get_file already has error handlers for its parameters
+    # chunks is in the format: {"chunk0": {"text": "text to encode", "title": "title of the document", ...}, ...}
     chunks = json.loads(get_file(chunks_file, bucket_name))
     logger.info("Chunks downloaded successfully")
 
     logger.info("Embedding chunks...")
     points = list()
 
-    # Create the vector for each chunk, and then insert it into a PointStruct object
-    for chunk_data in chunks.values():
-        point = PointStruct(
-            # PointStruct support a uuid string or an integer
+    # Create a list where each entry is the text to encode for each chunk
+    chunks_text = [chunk_info["text"] for chunk_info in chunks.values()]
+
+    # SentenceTransformers allows batch embeddings
+    chunks_vectors = embedding_model.encode(chunks_text)
+
+    # Create a list of PointStruct objects, each PointStruct object is a chunk
+    points = [
+        PointStruct(
             id=str(uuid.uuid4()),
-            vector=embedding_model.encode(chunk_data["text"]),
-            payload=chunk_data,
+            vector=chunks_vectors[chunk_number],
+            payload=chunk_info,
         )
-        # Inserting the PointStruct object of each chunk into the points list
-        points.append(point)
+        for chunk_number, chunk_info in enumerate(chunks.values())
+    ]
 
     logger.info("Embeddings created")
 
