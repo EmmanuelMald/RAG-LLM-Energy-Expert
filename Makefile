@@ -8,3 +8,6 @@ gcloud-auth:
 	
 uv-sync:
 	uv sync --all-groups
+
+install-git-hooks: 
+	pre-commit install
