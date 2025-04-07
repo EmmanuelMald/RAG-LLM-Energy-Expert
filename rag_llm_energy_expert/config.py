@@ -23,5 +23,5 @@ class QDRANT_CONFIG(BaseSettings):
     SECRET_ID: str = "QDRANT-KEY"
     VERSION_ID: str = "1"
     API_KEY: SecretStr = SecretStr("")
-    COLLECTION_NAME: str = "energy_expert"
+    COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"

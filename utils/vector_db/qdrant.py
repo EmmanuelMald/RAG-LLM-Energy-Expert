@@ -6,6 +6,7 @@ from qdrant_client.models import (
     Filter,
     FieldCondition,
     MatchValue,
+    FilterSelector,
 )
 from loguru import logger
 import sys
@@ -89,11 +90,13 @@ def delete_document(collection_name: str, document_title: str) -> None:
     # Delete document
     client.delete(
         collection_name=collection_name,
-        filter=Filter(
-            must=FieldCondition(
-                key="title",
-                match=MatchValue(document_title),
-            )
+        points_selector=FilterSelector(
+            filter=Filter(
+                must=FieldCondition(
+                    key="title",
+                    match=MatchValue(value=document_title),
+                )
+            ),
         ),
     )
 
@@ -113,7 +116,7 @@ def upload_points(collection_name: str, points: list[PointStruct]) -> None:
 
     logger.info("Uploading points...")
     # Error handlers for parameters
-    if not isinstance(collection_name, str) or collection_name != "":
+    if not isinstance(collection_name, str) or collection_name == "":
         raise TypeError("The collection_name parameter must be a string")
 
     if not isinstance(points, list):
@@ -124,7 +127,7 @@ def upload_points(collection_name: str, points: list[PointStruct]) -> None:
                 "points cannot be an empty list and each entry must be a PointStruct object"
             )
 
-    document_title = points[0].metadata["title"]
+    document_title = points[0].payload["title"]
 
     if document_in_collection(collection_name, document_title):
         raise ValueError(
@@ -154,7 +157,7 @@ def update_points(collection_name: str, points: list[PointStruct]) -> None:
     """
     logger.info("Updating points...")
     # Error handlers for parameters
-    if not isinstance(collection_name, str) or collection_name != "":
+    if not isinstance(collection_name, str) or collection_name == "":
         raise TypeError("The collection_name parameter must be a string")
 
     if not isinstance(points, list):
@@ -165,7 +168,7 @@ def update_points(collection_name: str, points: list[PointStruct]) -> None:
                 "points cannot be an empty list and each entry must be a PointStruct object"
             )
 
-    document_title = points[0].metadata["title"]
+    document_title = points[0].payload["title"]
 
     if not document_in_collection(collection_name, document_title):
         logger.info(
