@@ -31,7 +31,10 @@ def extract_pdf_content(
     logger.info("Extracting PDF content...")
     # Datatype Check
     if not isinstance(pdf_path, str):
-        raise TypeError("pdf_path parameter must be a string")
+        raise ValueError(
+            "pdf_path parameter must be a string containing either a gcs path (ex: 'gs://bucket_name/folder_name/pdf_name.pdf')"
+            " or a local path (can be a relative path or a full path ex: 'local_folder/pdf_file.pdf' or 'C:Users/folder/pdf_file.pdf')"
+        )
 
     # File extension check
     file_extension = pdf_path.split(".")[-1]
@@ -112,8 +115,8 @@ def chunk_by_md_headers(
     """
     logger.info("Chunking the text by markdown headers...")
 
-    if not isinstance(text, str):
-        raise TypeError("The text parameter must be a string")
+    if not isinstance(text, str) or text == "":
+        raise TypeError("The text parameter must be a not null string")
 
     # Markdown headers that the text will be splitted by
     headers_to_split_on = [

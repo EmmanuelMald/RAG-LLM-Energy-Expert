@@ -9,12 +9,10 @@ sys.path.append("..")
 
 from rag_llm_energy_expert.parsers_auxiliars import (
     extract_pdf_content,
-    chunk_by_md_headers,
-    size_md_chunks,
-    prepare_chunks_for_embeddings,
+    chunk_text,
 )
 from rag_llm_energy_expert.config import GCP_CONFIG, QDRANT_CONFIG
-from utils.gcp.gcs import upload_file_from_memory, get_file
+from utils.gcp.gcs import get_file
 from utils.vector_db.qdrant import update_points
 
 # Initialize config classes
@@ -23,8 +21,7 @@ qdrant_config = QDRANT_CONFIG()
 
 
 def parse_file(
-    bucket_name: str,
-    gcs_document_path: str,
+    file_path: str,
     chunk_size: int,
     chunk_overlap: int,
 ) -> str:
@@ -32,8 +29,8 @@ def parse_file(
     Parse a file to be embedded into vectors.
 
     Args:
-        gcs_document_path: str -> GCS Path to the file to be parsed. Ex. 'folder1/my_document.pdf'
-        bucket_name: str -> Name of the GCS bucket
+        file_path: str -> Either a gcs path: (ex: 'gs://bucket_name/folder_name/pdf_name.pdf') or
+                        a local path (can be a relative path or a full path ex: 'local_folder/pdf_file.pdf' or 'C:Users/folder/pdf_file.pdf')
         chunk_size: int -> Number of tokens to split the text
         chunk_overlap: int -> Number of tokens that will be overlapped on each chunk
 
@@ -43,12 +40,10 @@ def parse_file(
     logger.info("Parsing file...")
     allowed_formats = {"pdf": extract_pdf_content}
 
-    if not isinstance(gcs_document_path, str):
-        raise ValueError(
-            "gcs_document_path parameter must be a string. Ex: 'folder/my_doc.pdf'"
-        )
+    if not isinstance(file_path, str) or file_path == "":
+        raise ValueError("file_path must be a not null string")
 
-    extension = gcs_document_path.split(".")[-1]
+    extension = file_path.split(".")[-1]
 
     if extension not in allowed_formats:
         raise ValueError(
@@ -56,49 +51,14 @@ def parse_file(
         )
 
     # Step 1: Extract the data and save it into a dictionary
-    file_data = allowed_formats[extension](
-        gcs_file_path=gcs_document_path, bucket_name=bucket_name
+    file_data = allowed_formats[extension](file_path)
+
+    # Step 2:  Chunk the data
+    chunks = chunk_text(
+        text=file_data["text"], chunk_size=chunk_size, chunk_overlap=chunk_overlap
     )
 
-    # Step 2:  Chunk the data by the markdown headers
-    md_headers_chunks = chunk_by_md_headers(md_text=file_data["text"])
-
-    # Step 3: Chunk the md_headers_chunks into smaller ones based on the chunk_size and overlap params
-    chunks_sized = size_md_chunks(
-        md_headers_chunks=md_headers_chunks,
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-    )
-
-    # Add the chunk_size to the metadata
-    file_data["chunk_size"] = chunk_size
-
-    # Step 4: Prepare the chunks to be embedded.
-    # Returns a dictionary which each entry is a chunk
-    chunks_to_embed = prepare_chunks_for_embeddings(
-        chunks_sized=chunks_sized, file_data=file_data
-    )
-
-    # Step 5: Store chunks into GCP
-    logger.info("Storing chunks in GCP...")
-    upload_date = chunks_to_embed[0]["upload_date"]
-
-    storage_file_path = f"chunks/{file_data['title']}_{chunk_size}_{upload_date}.txt"
-
-    chunks_to_store = {f"chunk{i}": chunk for i, chunk in enumerate(chunks_to_embed)}
-
-    # ensure_ascii == False to preserve word's accents
-    json_chunks_plain = json.dumps(chunks_to_store, ensure_ascii=False)
-
-    upload_file_from_memory(
-        blob_name=storage_file_path,
-        string_data=json_chunks_plain,
-        bucket_name=bucket_name,
-    )
-
-    logger.info(f"Chunks stored in {storage_file_path}")
-
-    return storage_file_path
+    return chunks
 
 
 def create_points(
@@ -160,7 +120,7 @@ def create_points(
 
 
 def upload_document(
-    gcs_document_path: str,
+    pdf_path: str,
     chunk_overlap: int,
     vectordb_collection: str,
     embedding_model: str,
@@ -171,7 +131,7 @@ def upload_document(
     into a vector database collection.
 
     Args:
-        gcs_document_path: str -> GCS path where the document is stored. Ex: "folder1/folder2/file_name.pdf"
+        pdf_path: str -> GCS path where the document is stored. Ex: "folder1/folder2/file_name.pdf"
         vectordb_collection: str -> Name of the vector DB collection where the document's chunks will be stored. Default qdrant_config.COLLECTION_NAME + qdrant_config.COLLECTION_VERSION
         chunk_overlap: int -> Number of tokens to overlap between chunks. Default 0
         embedding_model: str -> Name of the embedding model to be used. Must be available in the sentence-transformers library.
@@ -200,7 +160,7 @@ def upload_document(
     # Step 1: Parse file
     chunks_file_path = parse_file(
         bucket_name=bucket_name,
-        gcs_document_path=gcs_document_path,
+        pdf_path=pdf_path,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
     )
