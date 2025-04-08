@@ -26,7 +26,8 @@ def extract_pdf_content(
                         a local path (can be a relative path or a full path ex: 'local_folder/pdf_file.pdf' or 'C:Users/folder/pdf_file.pdf')
 
     Return:
-        file_data: dict[str, str] -> Dictionary with all the pdf parsed in a markdown format and metadata
+        file_data: dict[str, str | dict] -> Dictionary with all the pdf parsed in a markdown format and metadata, it has the format:
+                                            {"text": "string with all the PDF text", "metadata": <{"key": "value"}}
     """
     logger.info("Extracting PDF content...")
     # Datatype Check
@@ -92,8 +93,10 @@ def extract_pdf_content(
 
     file_data = {
         "text": md_text,
-        "title": file_title,
-        "storage_path": pdf_path,
+        "metadata": {
+            "title": file_title,
+            "storage_path": pdf_path,
+        },
     }
 
     logger.info("PDF content successfully extracted")
@@ -213,7 +216,7 @@ def prepare_chunks_for_embeddings(
     logger.info("Creating chunks to embed...")
     for i, final_chunk in enumerate(final_chunks):
         # Add the page content in the metadata
-        final_chunk["data"] = chunks_sized[i].page_content
+        final_chunk["text"] = chunks_sized[i].page_content
 
         # Add extra_metadata to each chunk_metadata
         final_chunk.update(extra_metadata)
@@ -239,7 +242,7 @@ def chunk_text(
         metadata: dict[str, str] -> Optional. Dictionary with the metadata of the text. Each key and value
                                               must be strings
 
-    Return: list[dict] -> List of dictionaries, each dictionary is a chunk, the text to embed is in the key "data".
+    Return: list[dict] -> List of dictionaries, each dictionary is a chunk, the text to embed is in the key "text".
                           The other keys are metadata
     """
     # Step 1: chunk by md headers. (even when the string does not has a markdown format)
