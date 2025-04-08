@@ -176,48 +176,37 @@ def size_md_chunks(
 
 def prepare_chunks_for_embeddings(
     chunks_sized: list,
-    file_data: dict[str, str],
+    file_data: dict[str, str] | None = None,
 ) -> list[dict]:
     """
-    Create the final chunks that will be embedded as vectors.
+    Create a list of dictionaries, each dictionary contains the text to embed and its metadata
 
     Args:
         chunks_sized: list[Documents] -> List of Documents sized
-        file_data: dict[str, str] -> Dictionary with the next keys:
-                                - title: str -> Name of the document
-                                - storage_path: str -> The GCS path where its stored. ex: "gs://folder/text.pdf"
-
+        file_data: dict[str, str] -> Optional. Dictionary with metadata of the text
     Returns:
         list[dict] -> List of dictionaries, each dictionary is a chunk
     """
-    mandatory_file_data_keys = ["title", "storage_path"]
-
     logger.info("Preparing chunks for embedding...")
 
+    # Error handlers for chunks_sized
     if not isinstance(chunks_sized, list):
         raise TypeError("The chunks_sized parameter must be a list of Documents")
-
-    if not isinstance(file_data, dict):
-        raise TypeError("file_data parameter must be a dictionary")
-
-    else:
-        if not all([x in file_data.keys() for x in mandatory_file_data_keys]):
-            raise ValueError(
-                f"file_data parameter must contain the next keys: {mandatory_file_data_keys}"
-            )
-
-    logger.info("Creating additional metadata")
 
     # Add the datetime of when the chunks were created
     extra_metadata = {
         "upload_date": datetime.now().strftime(r"%Y-%m-%d"),
     }
 
-    # Add all the metadata in file_data to extra_metadata
-    extra_metadata.update(file_data)
+    # Error handlers for file_data
+    if file_data is not None:
+        if not isinstance(file_data, dict):
+            raise TypeError("file_data parameter must be a dictionary")
+
+        # Add all the metadata in file_data to extra_metadata
+        extra_metadata.update(file_data)
 
     # Creating a list of dictionaries, each entry of the list is the metadata of each chunk
-    logger.info("Extracting chunk's metadata")
     final_chunks = [doc.metadata for doc in chunks_sized]
 
     logger.info("Creating chunks to embed...")
