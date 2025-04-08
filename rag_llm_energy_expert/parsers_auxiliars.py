@@ -99,7 +99,7 @@ def extract_pdf_content(
 
 
 def chunk_by_md_headers(
-    md_text: str,
+    text: str,
     markdown_headers_to_split_on: list[tuple[str]] = [
         ("#", "Header 1"),
         ("##", "Header 2"),
@@ -107,21 +107,21 @@ def chunk_by_md_headers(
         ("####", "Header 4"),
         ("#####", "Header 5"),
     ],
-) -> list:
+) -> list[pymupdf.Document]:
     """
     Split the data by the markdown headers
 
     Args:
-        md_text: str -> Text in Markdown format
+        text: str -> Text to be chunked by the markdown headers.
         markdown_headers_to_split_on: list[tuple[str]] -> List of tuples, each entry is a tuple containing the header to split on
 
     Returns:
-        list[Document] -> List of Documents, each Document has 'page_content' and 'metadata' attributes
+        list[pymupdf.Document] -> List of Documents, each Document has 'page_content' and 'metadata' attributes
     """
-    logger.info("Chunking the text by the markdown headers...")
+    logger.info("Chunking the text by markdown headers...")
 
-    if not isinstance(md_text, str):
-        raise TypeError("The md_text parameter must be a markdown formatted string")
+    if not isinstance(text, str):
+        raise TypeError("The text parameter must be a string")
 
     if not isinstance(markdown_headers_to_split_on, list):
         raise TypeError(
@@ -140,7 +140,7 @@ def chunk_by_md_headers(
     )
 
     # Split the text by the headers
-    md_headers_chunks = markdown_splitter.split_text(md_text)
+    md_headers_chunks = markdown_splitter.split_text(text)
 
     logger.info("Chunks based on markdown headers successfully created")
 
@@ -150,7 +150,7 @@ def chunk_by_md_headers(
 def size_md_chunks(
     md_headers_chunks: list,
     chunk_size: int,
-    chunk_overlap: int = 0,
+    chunk_overlap: int,
 ) -> list:
     """
     Once the text has been chunked by the markdown headers, its time to split each chunk even more based on the
