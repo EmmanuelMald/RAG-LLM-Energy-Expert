@@ -90,7 +90,7 @@ def extract_pdf_content(
     file_data = {
         "text": md_text,
         "title": file_title,
-        "pdf_path": pdf_path,
+        "storage_path": pdf_path,
     }
 
     logger.info("PDF content successfully extracted")
