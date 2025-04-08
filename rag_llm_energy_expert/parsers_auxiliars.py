@@ -193,12 +193,12 @@ def prepare_chunks_for_embeddings(
         chunks_sized: list[Documents] -> List of Documents sized
         file_data: dict[str, str] -> Dictionary with the next keys:
                                 - title: str -> Name of the document
-                                - gcs_path: str -> The GCS path where its stored. ex: "gs://folder/text.pdf"
+                                - storage_path: str -> The GCS path where its stored. ex: "gs://folder/text.pdf"
 
     Returns:
         list[dict] -> List of dictionaries, each dictionary is a chunk
     """
-    mandatory_file_data_keys = ["title", "gcs_path"]
+    mandatory_file_data_keys = ["title", "storage_path"]
 
     logger.info("Preparing chunks for embedding...")
 
