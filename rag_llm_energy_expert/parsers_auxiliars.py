@@ -5,8 +5,10 @@ from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
 )
 from datetime import datetime
-import sys
 from loguru import logger
+import os
+import sys
+
 
 sys.path.append("..")
 
@@ -14,43 +16,72 @@ from utils.gcp.gcs import get_file, blob_exists
 
 
 def extract_pdf_content(
-    gcs_file_path: str,
-    bucket_name: str,
+    pdf_path: str,
 ) -> dict[str, str]:
     """
-    Parse a pdf that is stored in Google Cloud Storage (GCS)
+    Parse a pdf that is stored in Google Cloud Storage (GCS) or in the local
 
     Args:
-        gcs_file_path: str -> Path to the file in gcs. Ex: "gcs_folder/file.pdf"
-        bucket_path: str -> Name of the gcs bucket. Ex: "my_bucket"
+        pdf_path: str -> Either a gcs path: (ex: 'gs://bucket_name/folder_name/pdf_name.pdf') or
+                        a local path (can be a relative path or a full path ex: 'local_folder/pdf_file.pdf' or 'C:Users/folder/pdf_file.pdf')
 
     Return:
         file_data: dict[str, str] -> Dictionary with all the pdf parsed in a markdown format and metadata
     """
-    # blob_exists already has error handlers for the parameters
-    if not blob_exists(gcs_file_path, bucket_name):
-        raise ValueError(f"The file {gcs_file_path} does not exists")
+    logger.info("Extracting PDF content...")
+    # Datatype Check
+    if not isinstance(pdf_path, str):
+        raise TypeError("pdf_path parameter must be a string")
 
-    extension = gcs_file_path.split(".")[-1]
+    # File extension check
+    file_extension = pdf_path.split(".")[-1]
 
-    if extension != "pdf":
+    if file_extension != "pdf":
         raise TypeError("The file is not a pdf")
 
-    title = gcs_file_path.split("/")[-1].split(".")[0]
+    # Checking if the path comes from gcs or is a local path
+    if pdf_path.startswith("gs://"):
+        logger.info("google cloud storage path detected")
+        # Taking out the 'gs://' part of the string
+        useful_pdf_path = pdf_path[5:]
 
-    # Load the file in memory
-    logger.info("Loading file from GCS...")
-    pdf_file_bytes = get_file(gcs_file_path, bucket_name)
+        # Splitting the pdf path in two
+        pdf_path_parts = useful_pdf_path.split("/", maxsplit=1)
 
-    # Create a Document object that is like a list, where
-    # each entry is a page
-    logger.info("Extracting PDF content...")
-    file = pymupdf.Document(stream=pdf_file_bytes)
+        try:
+            bucket_name = pdf_path_parts[0]
+            blob_name = pdf_path_parts[1]
+
+        except Exception as e:
+            raise ValueError(
+                "There is an error in the pdf_path parameter. if you try to set a gcs file path,"
+                f" use the following format: 'gs://bucket_name/path/to/file.pdf'. {e}"
+            )
+
+        if not blob_exists(blob_name, bucket_name):
+            raise ValueError(f"The file {pdf_path} does not exists")
+
+        # Download in memory the pdf from GCS
+        pdf_bytes = get_file(gcs_file_path=blob_name, bucket_name=bucket_name)
+
+        # Load the PDF content into a Document object, each entry of the Document is a page
+        pdf_document = pymupdf.Document(stream=pdf_bytes)
+
+    # If the path seems to be a local path
+    else:
+        logger.info("local path detected")
+        if not os.path.isfile(pdf_path):
+            raise ValueError(f"The file {pdf_path} does not exists")
+
+        # load the pdf into a Document object, each entry of the Document is a page
+        pdf_document = pymupdf.Document(pdf_path)
+
+    file_title = pdf_path.split("/")[-1].split(".")[0]
 
     # Reads the PDF with its metadata and creates a list of dictionaries
-    logger.info("Converting to markdown format...")
+    logger.info("Converting PDF content to a markdown format...")
     md_text = pymupdf4llm.to_markdown(
-        file,
+        pdf_document,
         # page_chunks = True, # Create a list of pages of the Document
         # extract_words=True, # Adds key words to each page dictionary
         show_progress=False,
@@ -58,8 +89,8 @@ def extract_pdf_content(
 
     file_data = {
         "text": md_text,
-        "title": title,
-        "gcs_path": gcs_file_path,
+        "title": file_title,
+        "pdf_path": pdf_path,
     }
 
     logger.info("PDF content successfully extracted")
