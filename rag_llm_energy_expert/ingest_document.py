@@ -161,11 +161,10 @@ def create_points(
 
 def upload_document(
     gcs_document_path: str,
-    chunk_overlap: int = 0,
-    vectordb_collection: str = qdrant_config.COLLECTION_NAME
-    + qdrant_config.COLLECTION_VERSION,
-    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2",
-    bucket_name: str = gcp_config.BUCKET_NAME,
+    chunk_overlap: int,
+    vectordb_collection: str,
+    embedding_model: str,
+    bucket_name: str,
 ):
     """
     Reads a file stored in GCS, then parse it, chunk it, generate vectors for each chunk, and then embed those vectors
