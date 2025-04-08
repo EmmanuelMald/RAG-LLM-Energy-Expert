@@ -116,19 +116,17 @@ def chunk_by_md_headers(
         raise TypeError("The text parameter must be a string")
 
     # Markdown headers that the text will be splitted by
-    markdown_headers_to_split_by = (
-        [
-            ("#", "Header 1"),
-            ("##", "Header 2"),
-            ("###", "Header 3"),
-            ("####", "Header 4"),
-            ("#####", "Header 5"),
-        ],
-    )
+    headers_to_split_on = [
+        ("#", "Header 1"),
+        ("##", "Header 2"),
+        ("###", "Header 3"),
+        ("####", "Header 4"),
+        ("#####", "Header 5"),
+    ]
 
     # Initialize a MarkdonHeaderTextSplitter object
     markdown_splitter = MarkdownHeaderTextSplitter(
-        markdown_headers_to_split_by, strip_headers=False
+        headers_to_split_on, strip_headers=False
     )
 
     # Split the text by the headers
@@ -220,3 +218,41 @@ def prepare_chunks_for_embeddings(
     logger.info("Chunks ready to be embedded")
 
     return final_chunks
+
+
+def chunk_text(
+    text: str,
+    chunk_size: int,
+    chunk_overlap: int,
+    metadata: dict[str, str] | None = None,
+) -> list[dict]:
+    """
+    This function is an orchestrator for the different steps that the chunking process requires
+
+    Args:
+        text: str -> String with the text to chunk
+        chunk_size: int -> Number of tokens to split the md chunks
+        chunk_overlap: int -> Number of tokens that will be overlapped on each chunk
+        metadata: dict[str, str] -> Optional. Dictionary with the metadata of the text. Each key and value
+                                              must be strings
+
+    Return: list[dict] -> List of dictionaries, each dictionary is a chunk, the text to embed is in the key "data".
+                          The other keys are metadata
+    """
+    # Step 1: chunk by md headers. (even when the string does not has a markdown format)
+    # it already has error handlers for the 'text' parameter
+    md_headers_chunks = chunk_by_md_headers(text=text)
+
+    # Step 2: split each chunk previously created based on the chunk_size
+    sized_chunks = size_md_chunks(
+        md_headers_chunks=md_headers_chunks,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+    )
+
+    # Step 3: Prepare the sized chunks to embed
+    chunks_to_embed = prepare_chunks_for_embeddings(
+        chunks_sized=sized_chunks, file_data=metadata
+    )
+
+    return chunks_to_embed
