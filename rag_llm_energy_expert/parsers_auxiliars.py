@@ -100,20 +100,12 @@ def extract_pdf_content(
 
 def chunk_by_md_headers(
     text: str,
-    markdown_headers_to_split_on: list[tuple[str]] = [
-        ("#", "Header 1"),
-        ("##", "Header 2"),
-        ("###", "Header 3"),
-        ("####", "Header 4"),
-        ("#####", "Header 5"),
-    ],
 ) -> list[pymupdf.Document]:
     """
     Split the data by the markdown headers
 
     Args:
         text: str -> Text to be chunked by the markdown headers.
-        markdown_headers_to_split_on: list[tuple[str]] -> List of tuples, each entry is a tuple containing the header to split on
 
     Returns:
         list[pymupdf.Document] -> List of Documents, each Document has 'page_content' and 'metadata' attributes
@@ -123,20 +115,20 @@ def chunk_by_md_headers(
     if not isinstance(text, str):
         raise TypeError("The text parameter must be a string")
 
-    if not isinstance(markdown_headers_to_split_on, list):
-        raise TypeError(
-            "The markdown_headers_to_split_on parameter must be a list of tuples"
-        )
-
-    else:
-        if not all(isinstance(x, tuple) for x in markdown_headers_to_split_on):
-            raise TypeError(
-                "All the entries of the markdown_headers_to_split_on must be a tuple of strings"
-            )
+    # Markdown headers that the text will be splitted by
+    markdown_headers_to_split_by = (
+        [
+            ("#", "Header 1"),
+            ("##", "Header 2"),
+            ("###", "Header 3"),
+            ("####", "Header 4"),
+            ("#####", "Header 5"),
+        ],
+    )
 
     # Initialize a MarkdonHeaderTextSplitter object
     markdown_splitter = MarkdownHeaderTextSplitter(
-        markdown_headers_to_split_on, strip_headers=False
+        markdown_headers_to_split_by, strip_headers=False
     )
 
     # Split the text by the headers
