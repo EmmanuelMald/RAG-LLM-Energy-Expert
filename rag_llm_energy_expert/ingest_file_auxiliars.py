@@ -130,7 +130,7 @@ def chunk_text(
         raise ValueError("Chunk_overlap must be an integer greater or equal to 0")
 
     try:
-        model = SentenceTransformer(embedding_model)
+        model = SentenceTransformer(embedding_model, trust_remote_code=True)
 
     except Exception as e:
         raise ValueError(
@@ -194,7 +194,7 @@ def embed_chunks(
         )
 
     try:
-        model = SentenceTransformer(embedding_model)
+        model = SentenceTransformer(embedding_model, trust_remote_code=True)
 
     except Exception as e:
         raise ValueError(
