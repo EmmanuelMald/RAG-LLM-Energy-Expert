@@ -215,3 +215,47 @@ def create_collection(collection_name: str, vector_size: int) -> None:
         vectors_config=VectorParams(size=vector_size, distance=Distance.DOT),
     )
     logger.info("Collection created")
+
+
+def create_points(
+    chunks: list[dict],
+) -> list[PointStruct]:
+    """
+    From the chunks created (list of dictionaries), create a list of PointStruct objects ready to be indexed into the Qdrant vector database
+
+    Args:
+        chunks: list[dict] -> list of Dictionaries, where each dictionary is a chunk. Each dictionary contains the keys:
+                            'id' -> Id of the PointStruct, is a uuid string
+                            'vector' -> vector of n dimensions
+                            'payload' -> dictionary with two keys: "text" and "metadata"
+    Returns:
+        list[PointStruct] -> Returns a list of PointStruct, which is ready to be indexed into the vector database
+    """
+    # Mandatory keys to be present on each dictionary of the chunks list
+    mandatory_keys = ["id", "vector", "payload"]
+
+    logger.info("Creating points...")
+
+    # Error handlers for chunks
+    if not isinstance(chunks, list):
+        raise TypeError("The 'chunks' parameter must be a list of dictionaries")
+
+    # I assume that the chunks has the same structure
+    if not all([x in chunks[0].keys() for x in mandatory_keys]):
+        raise ValueError(
+            f"All the chunks must contains the following keys: {', '.join(mandatory_keys)}"
+        )
+
+    # Create a list of PointStruct objects, each PointStruct object is a chunk
+    points = [
+        PointStruct(
+            id=chunk_info["id"],
+            vector=chunk_info["vector"],
+            payload=chunk_info["payload"],
+        )
+        for chunk_info in chunks
+    ]
+
+    logger.info("Points created")
+
+    return points
