@@ -49,7 +49,9 @@ def document_in_collection(collection_name: str, document_title: str) -> bool:
 
     # Create a filter to match payload
     title_filter = Filter(
-        must=[FieldCondition(key="title", match=MatchValue(value=document_title))]
+        must=[
+            FieldCondition(key="metadata.title", match=MatchValue(value=document_title))
+        ]
     )
 
     # Scroll through all matching vectors
@@ -80,7 +82,7 @@ def delete_document(collection_name: str, document_title: str) -> None:
     Return:
         None
     """
-    logger.info("Deleting document...")
+    logger.info("Deleting previous points in the Vector DB related to the document...")
     # document_in_collection already has error handlers for its parameters
     if not document_in_collection(collection_name, document_title):
         raise ValueError(
@@ -93,7 +95,7 @@ def delete_document(collection_name: str, document_title: str) -> None:
         points_selector=FilterSelector(
             filter=Filter(
                 must=FieldCondition(
-                    key="title",
+                    key="metadata.title",
                     match=MatchValue(value=document_title),
                 )
             ),
@@ -127,11 +129,11 @@ def upload_points(collection_name: str, points: list[PointStruct]) -> None:
                 "points cannot be an empty list and each entry must be a PointStruct object"
             )
 
-    document_title = points[0].payload["title"]
+    document_title = points[0].payload["metadata"]["title"]
 
     if document_in_collection(collection_name, document_title):
         raise ValueError(
-            f"The points of the document {document_title} has been previously uploaded in"
+            f"The points of the document {document_title} has been previously uploaded in "
             f"the collection {collection_name}. If you want to update them please use the"
             " update_points function"
         )
@@ -168,7 +170,7 @@ def update_points(collection_name: str, points: list[PointStruct]) -> None:
                 "points cannot be an empty list and each entry must be a PointStruct object"
             )
 
-    document_title = points[0].payload["title"]
+    document_title = points[0].payload["metadata"]["title"]
 
     if not document_in_collection(collection_name, document_title):
         logger.info(
@@ -215,3 +217,68 @@ def create_collection(collection_name: str, vector_size: int) -> None:
         vectors_config=VectorParams(size=vector_size, distance=Distance.DOT),
     )
     logger.info("Collection created")
+
+
+def create_points(
+    chunks: list[dict],
+) -> list[PointStruct]:
+    """
+    From the chunks created (list of dictionaries), create a list of PointStruct objects ready to be indexed into the Qdrant vector database
+
+    Args:
+        chunks: list[dict] -> list of Dictionaries, where each dictionary is a chunk. Each dictionary contains the keys:
+                            'id' -> Id of the PointStruct, is a uuid string
+                            'vector' -> vector of n dimensions
+                            'payload' -> dictionary with two keys: "text" and "metadata"
+    Returns:
+        list[PointStruct] -> Returns a list of PointStruct, which is ready to be indexed into the vector database
+    """
+    # Mandatory keys to be present on each dictionary of the chunks list
+    mandatory_keys = ["id", "vector", "payload"]
+
+    logger.info("Creating points...")
+
+    # Error handlers for chunks
+    if not isinstance(chunks, list):
+        raise TypeError("The 'chunks' parameter must be a list of dictionaries")
+
+    # I assume that the chunks has the same structure
+    if not all([x in chunks[0].keys() for x in mandatory_keys]):
+        raise ValueError(
+            f"All the chunks must contains the following keys: {', '.join(mandatory_keys)}"
+        )
+
+    # Create a list of PointStruct objects, each PointStruct object is a chunk
+    points = [
+        PointStruct(
+            id=chunk_info["id"],
+            vector=chunk_info["vector"],
+            payload=chunk_info["payload"],
+        )
+        for chunk_info in chunks
+    ]
+
+    logger.info("Points created")
+
+    return points
+
+
+def delete_collection(collection_name: str):
+    """
+    Deletes a collection if exists.
+
+    Args:
+        collection_name: str -> Name of the collection to delete
+
+    Return:
+        None
+    """
+    if not isinstance(collection_name, str) or collection_name == "":
+        raise TypeError("The parameter collection_name must be a not null string")
+
+    if not client.collection_exists(collection_name):
+        raise ValueError("The collection does not exists")
+
+    client.delete_collection(collection_name=collection_name)
+
+    logger.info("Collection deleted")

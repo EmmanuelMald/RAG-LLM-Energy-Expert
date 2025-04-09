@@ -25,6 +25,7 @@ general-dev = [
     "ruff>=0.11.0",
 ]
 llm = [
+    "einops>=0.8.1",
     "langchain-text-splitters>=0.3.7",
     "litellm>=1.63.11",
     "llama-cloud-services>=0.6.6",
@@ -34,4 +35,5 @@ llm = [
     "pypdf2>=3.0.1",
     "qdrant-client>=1.13.3",
     "sentence-transformers>=4.0.1",
+    "transformers>=4.50.1",
 ]

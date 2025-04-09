@@ -3,34 +3,25 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.ingest_document import upload_document
-from rag_llm_energy_expert.config import GCP_CONFIG, QDRANT_CONFIG
+from rag_llm_energy_expert.ingest_file import upload_file
+from rag_llm_energy_expert.config import QDRANT_CONFIG
 
 
 def main():
     # Load config values
-    gcp_config = GCP_CONFIG()
     qdrant_config = QDRANT_CONFIG()
 
     # Create parser
     parser = argparse.ArgumentParser(
-        description="This script loads a raw PDF stored in Google Cloud Storage into a vector DB"
+        description="This script loads a raw PDF stored either in Google Cloud Storage or in the local into a vector DB"
     )
 
     # Add args
     parser.add_argument(
-        "-p",
-        "--gcs-document-path",
+        "-f",
+        "--file_path",
         required=True,
-        help="Path inside the GCS bucket. Ex: 'gcs_folder1/gcs_folder2/pdf_name.pdf'",
-    )
-
-    parser.add_argument(
-        "-b",
-        "--bucket-name",
-        required=False,
-        help="Name of the GCS bucket where the file is stored. Ex: 'bucket_name'",
-        default=gcp_config.BUCKET_NAME,
+        help="Either a gcs path: (ex: 'gs://bucket_name/folder_name/pdf_name.pdf') or a local path (can be a relative path or a full path ex: 'local_folder/pdf_file.pdf' or 'C:Users/folder/pdf_file.pdf')",
     )
 
     parser.add_argument(
@@ -59,12 +50,11 @@ def main():
     # Parse args
     args = parser.parse_args()
 
-    upload_document(
-        gcs_document_path=args.gcs_document_path,
-        bucket_name=args.bucket_name,
-        vectordb_collection=args.vectordb_collection,
+    upload_file(
+        file_path=args.file_path,
         embedding_model=args.embedding_model,
         chunk_overlap=args.chunk_overlap,
+        collection_name=args.vectordb_collection,
     )
 
 
