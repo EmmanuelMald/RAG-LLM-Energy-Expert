@@ -26,4 +26,4 @@ class QDRANT_CONFIG(BaseSettings):
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
     CHUNK_OVERLAP: int = 10
-    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
+    EMBEDDING_MODEL: str = "nomic-ai/nomic-embed-text-v2-moe"
