@@ -4,7 +4,7 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.ingest_document_auxiliars import (
+from rag_llm_energy_expert.ingest_file_auxiliars import (
     extract_pdf_content,
     chunk_text,
     embed_chunks,

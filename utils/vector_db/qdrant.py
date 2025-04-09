@@ -49,7 +49,9 @@ def document_in_collection(collection_name: str, document_title: str) -> bool:
 
     # Create a filter to match payload
     title_filter = Filter(
-        must=[FieldCondition(key="title", match=MatchValue(value=document_title))]
+        must=[
+            FieldCondition(key="metadata.title", match=MatchValue(value=document_title))
+        ]
     )
 
     # Scroll through all matching vectors
@@ -80,7 +82,7 @@ def delete_document(collection_name: str, document_title: str) -> None:
     Return:
         None
     """
-    logger.info("Deleting document...")
+    logger.info("Deleting previous points in the Vector DB related to the document...")
     # document_in_collection already has error handlers for its parameters
     if not document_in_collection(collection_name, document_title):
         raise ValueError(
@@ -93,7 +95,7 @@ def delete_document(collection_name: str, document_title: str) -> None:
         points_selector=FilterSelector(
             filter=Filter(
                 must=FieldCondition(
-                    key="title",
+                    key="metadata.title",
                     match=MatchValue(value=document_title),
                 )
             ),
@@ -131,7 +133,7 @@ def upload_points(collection_name: str, points: list[PointStruct]) -> None:
 
     if document_in_collection(collection_name, document_title):
         raise ValueError(
-            f"The points of the document {document_title} has been previously uploaded in"
+            f"The points of the document {document_title} has been previously uploaded in "
             f"the collection {collection_name}. If you want to update them please use the"
             " update_points function"
         )
@@ -259,3 +261,24 @@ def create_points(
     logger.info("Points created")
 
     return points
+
+
+def delete_collection(collection_name: str):
+    """
+    Deletes a collection if exists.
+
+    Args:
+        collection_name: str -> Name of the collection to delete
+
+    Return:
+        None
+    """
+    if not isinstance(collection_name, str) or collection_name == "":
+        raise TypeError("The parameter collection_name must be a not null string")
+
+    if not client.collection_exists(collection_name):
+        raise ValueError("The collection does not exists")
+
+    client.delete_collection(collection_name=collection_name)
+
+    logger.info("Collection deleted")

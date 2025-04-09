@@ -3,7 +3,7 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.ingest_document import upload_document
+from rag_llm_energy_expert.ingest_document import upload_file
 from rag_llm_energy_expert.config import QDRANT_CONFIG
 
 
@@ -50,11 +50,11 @@ def main():
     # Parse args
     args = parser.parse_args()
 
-    upload_document(
+    upload_file(
         file_path=args.file_path,
-        vectordb_collection=args.vectordb_collection,
         embedding_model=args.embedding_model,
         chunk_overlap=args.chunk_overlap,
+        collection_name=args.vectordb_collection,
     )
 
 
