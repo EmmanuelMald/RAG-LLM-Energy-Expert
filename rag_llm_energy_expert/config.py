@@ -25,5 +25,5 @@ class QDRANT_CONFIG(BaseSettings):
     API_KEY: SecretStr = SecretStr("")
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
-    CHUNK_OVERLAP: int = 0
+    CHUNK_OVERLAP: int = 10
     EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
