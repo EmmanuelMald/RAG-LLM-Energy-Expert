@@ -3,7 +3,7 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.ingest_document import upload_file
+from rag_llm_energy_expert.ingest_file import upload_file
 from rag_llm_energy_expert.config import QDRANT_CONFIG
 
 
