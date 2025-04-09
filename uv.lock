@@ -2432,6 +2432,7 @@ llm = [
     { name = "pypdf2" },
     { name = "qdrant-client" },
     { name = "sentence-transformers" },
+    { name = "transformers" },
 ]
 notebooks = [
     { name = "dotenv" },
@@ -2464,6 +2465,7 @@ llm = [
     { name = "pypdf2", specifier = ">=3.0.1" },
     { name = "qdrant-client", specifier = ">=1.13.3" },
     { name = "sentence-transformers", specifier = ">=4.0.1" },
+    { name = "transformers", specifier = ">=4.50.1" },
 ]
 notebooks = [
     { name = "dotenv", specifier = ">=0.9.9" },

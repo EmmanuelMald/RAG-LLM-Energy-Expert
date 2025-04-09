@@ -127,7 +127,7 @@ def upload_points(collection_name: str, points: list[PointStruct]) -> None:
                 "points cannot be an empty list and each entry must be a PointStruct object"
             )
 
-    document_title = points[0].payload["title"]
+    document_title = points[0].payload["metadata"]["title"]
 
     if document_in_collection(collection_name, document_title):
         raise ValueError(
@@ -168,7 +168,7 @@ def update_points(collection_name: str, points: list[PointStruct]) -> None:
                 "points cannot be an empty list and each entry must be a PointStruct object"
             )
 
-    document_title = points[0].payload["title"]
+    document_title = points[0].payload["metadata"]["title"]
 
     if not document_in_collection(collection_name, document_title):
         logger.info(

@@ -34,4 +34,5 @@ llm = [
     "pypdf2>=3.0.1",
     "qdrant-client>=1.13.3",
     "sentence-transformers>=4.0.1",
+    "transformers>=4.50.1",
 ]
