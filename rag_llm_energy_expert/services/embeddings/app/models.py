@@ -30,4 +30,4 @@ class TextRequest(BaseModel):
 
 
 class TextResponse(BaseModel):
-    chunks: dict[str, dict]
+    embedded_chunks: list[dict]
