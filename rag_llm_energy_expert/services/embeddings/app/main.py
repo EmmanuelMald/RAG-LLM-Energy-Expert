@@ -11,7 +11,7 @@ app = FastAPI()
 
 
 @app.post("/embed-text", response_model=EmbeddingResponse)
-async def generate_embeddings(request: EmbeddingRequest):
+def generate_embeddings(request: EmbeddingRequest):
     raw_chunks = text_embedder(
         text=request.text,
         chunk_overlap=request.chunk_overlap,
