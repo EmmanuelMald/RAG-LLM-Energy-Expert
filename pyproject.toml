@@ -18,11 +18,13 @@ notebooks = [
     "ipykernel>=6.29.5",
 ]
 general-dev = [
+    "fastapi>=0.115.12",
     "loguru>=0.7.3",
     "pre-commit>=4.2.0",
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.1",
     "ruff>=0.11.0",
+    "uvicorn>=0.34.0",
 ]
 llm = [
     "einops>=0.8.1",
