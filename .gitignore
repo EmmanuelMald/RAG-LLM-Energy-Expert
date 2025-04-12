@@ -178,6 +178,6 @@ cython_debug/
 
 # Terraform
 .terraform
-.tfstate
-.tfstate.backup
+*.tfstate
+*.tfstate.backup
 .terraform.*
