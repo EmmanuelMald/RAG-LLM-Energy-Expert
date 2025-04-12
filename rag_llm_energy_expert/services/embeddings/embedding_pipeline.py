@@ -108,7 +108,7 @@ def embed_chunks(
     final_chunks = [
         {
             "id": str(uuid.uuid4()),
-            "vector": chunks_embedded[i],
+            "vector": chunks_embedded[i].tolist(),
             "payload": {
                 "text": chunk_text,
                 "metadata": metadata,
@@ -153,6 +153,7 @@ def text_embedder(
         )
 
     # Initialize the model
+    logger.info(f"Loading the embedding model: {embedding_model_name}")
     try:
         model = SentenceTransformer(embedding_model_name, trust_remote_code=True)
     except Exception as e:
