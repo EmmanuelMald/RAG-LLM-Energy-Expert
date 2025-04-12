@@ -3,7 +3,6 @@ FROM python:3.11-slim
 
 ENV UV_VERSION=0.5.4
 
-
 # Create the main directoy where everything will be stored
 WORKDIR /embeddings
 
