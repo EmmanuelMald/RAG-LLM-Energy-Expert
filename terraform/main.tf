@@ -18,3 +18,25 @@ provider "google" {
       }
     }
   }
+
+resource "google_cloud_run_v2_service" "cloudrun_embeddings_instance" {
+  name     = var.cloudrun_embeddings_instance_name
+  location = var.gcp_region
+  client   = "terraform"
+
+  template {
+    containers {
+      image = "${var.gcp_region}-docker.pkg.dev/${var.gcp_project_id}/${var.env_prefix}-${var.artifact_registry_name}/embedding_service:latest"
+      ports{
+        container_port = var.cloudrun_embeddings_instance_port
+      }
+    }
+  }
+}
+
+resource "google_cloud_run_v2_service_iam_member" "noauth" {
+  location = google_cloud_run_v2_service.cloudrun_embeddings_instance.location
+  name     = google_cloud_run_v2_service.cloudrun_embeddings_instance.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}

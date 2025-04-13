@@ -34,3 +34,15 @@ variable "artifact_registry_dry_run"{
     description = "Determines if cleanup policies delete artifacts. true: No artifacts are deleted. false: Artifacts are deleted or kept depending on the policies"
     default = false
 }
+
+variable "cloudrun_embeddings_instance_name"{
+    type = string
+    description = "Name of the CloudRun instance for the embedding service"
+    default = "embedding-service"
+}
+
+variable "cloudrun_embeddings_instance_port"{
+    type = number
+    description = "Port where the container will listen"
+    default = 8080
+}

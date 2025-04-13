@@ -9,7 +9,8 @@ steps:
      - '-c'
      - | 
       cd terraform
-      terraform init && terraform plan --var-file='dev/dev.tfvars' 
+      terraform init && terraform plan --var-file='dev/dev.tfvars' \
+      -target=google_artifact_registry_repository.rag_llm_artifact_registry
 
   - id: 'tf apply'
     name: 'hashicorp/terraform'
@@ -18,9 +19,9 @@ steps:
       - '-c'
       - |
         cd terraform
-        terraform apply -var-file='dev/dev.tfvars' -auto-approve
-    waitFor:
-    - 'tf plan'
+        terraform apply -var-file='dev/dev.tfvars' \
+        -target=google_artifact_registry_repository.rag_llm_artifact_registry \
+        -auto-approve
 
   - id: 'copy uv files'
     name: 'ubuntu'
@@ -29,8 +30,6 @@ steps:
       - '-c' # Execute the following commands in a sequential manner
       - | # Allow to write commands in more than 1 row
         cp pyproject.toml uv.lock rag_llm_energy_expert/services/embeddings/.
-    waitFor:
-    - 'tf apply'
 
   - id: 'build embedding service image'
     name: 'gcr.io/cloud-builders/docker'
@@ -41,13 +40,22 @@ steps:
       - '-f' 
       - './rag_llm_energy_expert/services/embeddings/embeddings_service.dockerfile'
       - './rag_llm_energy_expert/services/embeddings'
-    waitFor: 
-    - 'copy uv files'
     
   - id: 'push embedding service image'
     name: 'gcr.io/cloud-builders/docker'
     args:
       - push 
       - 'northamerica-south1-docker.pkg.dev/$PROJECT_ID/dev-rag-llm-artifact/embedding_service:latest'
-    waitFor: 
-    - 'build embedding service image'
+  
+  - id: 'deploy embedding service'
+    name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd terraform
+        terraform apply -var-file='dev/dev.tfvars' \
+        -target=google_cloud_run_v2_service.cloudrun_embeddings_instance \
+        -target=google_cloud_run_v2_service_iam_member.noauth \
+        -auto-approve -target=google_cloud_run_v2_service.cloudrun_embeddings_instance
+
