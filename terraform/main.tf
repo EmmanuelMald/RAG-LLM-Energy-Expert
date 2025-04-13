@@ -30,6 +30,11 @@ resource "google_cloud_run_v2_service" "cloudrun_embeddings_instance" {
       ports{
         container_port = var.cloudrun_embeddings_instance_port
       }
+      resources {
+        limits = {
+          memory = "2Gi"
+        }
+      }
     }
   }
 }
