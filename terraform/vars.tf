@@ -1,3 +1,5 @@
+# To check data types: https://developer.hashicorp.com/terraform/language/expressions/types
+
 variable "gcp_project_id" {
     type = string
     description = "GCP project id"
