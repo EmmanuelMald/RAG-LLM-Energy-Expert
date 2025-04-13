@@ -13,5 +13,6 @@ install-git-hooks:
 	pre-commit install
 
 # For CloudBuild, it is necessary to being executed in the us-central1 region
+# check https://cloud.google.com/build/docs/locations#restricted_regions_for_some_projects
 run-embedding-service-cicd:
 	gcloud builds submit --region=us-central1 --config embedding_service.yaml
