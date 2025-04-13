@@ -1,0 +1,53 @@
+# The value of the - name parameter (container image or cloud builders) can be obtained from
+# https://cloud.google.com/build/docs/cloud-builders
+steps:
+  
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:1.11.3'
+    entrypoint: 'sh'
+    args: 
+     - '-c'
+     - | 
+      cd terraform
+      terraform init && terraform plan --var-file='dev/dev.tfvars' 
+
+  - id: 'tf apply'
+    name: 'hashicorp/terraform'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd terraform
+        terraform apply -var-file='dev/dev.tfvars' -auto-approve
+    waitFor:
+    - 'tf plan'
+
+  - id: 'copy uv files'
+    name: 'ubuntu'
+    entrypoint: 'sh'
+    args:
+      - '-c' # Execute the following commands in a sequential manner
+      - | # Allow to write commands in more than 1 row
+        cp pyproject.toml uv.lock rag_llm_energy_expert/services/embeddings/.
+    waitFor:
+    - 'tf apply'
+
+  - id: 'build embedding service image'
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build 
+      - '-t'
+      - 'northamerica-south1-docker.pkg.dev/$PROJECT_ID/dev-rag-llm-artifact/embedding_service:latest'
+      - '-f' 
+      - './rag_llm_energy_expert/services/embeddings/embeddings_service.dockerfile'
+      - './rag_llm_energy_expert/services/embeddings'
+    waitFor: 
+    - 'copy uv files'
+    
+  - id: 'push embedding service image'
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push 
+      - 'northamerica-south1-docker.pkg.dev/$PROJECT_ID/dev-rag-llm-artifact/embedding_service:latest'
+    waitFor: 
+    - 'build embedding service image'
