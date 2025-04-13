@@ -59,3 +59,6 @@ steps:
         -target=google_cloud_run_v2_service_iam_member.noauth \
         -auto-approve -target=google_cloud_run_v2_service.cloudrun_embeddings_instance
 
+logsBucket: 'gs://rag_llm_energy_expert/build_logs'
+options:
+  logging: GCS_ONLY
