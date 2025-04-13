@@ -26,9 +26,9 @@ COPY config.py embedding_pipeline.py __init__.py ./
 WORKDIR /embeddings/app/
 
 # Specify the port where the app will listen
-EXPOSE 5000
+EXPOSE 8080
 
 # Execute uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 
 
