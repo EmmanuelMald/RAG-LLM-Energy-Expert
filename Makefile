@@ -11,7 +11,8 @@ uv-sync:
 	uv sync --all-groups
 
 install-git-hooks: 
-	pre-commit install
+	uv run pre-commit install
+	uv run pre-commit install-hooks
 
 ################################# EMBEDDING SERVICE ###################################
 run-embedding-service-api:
