@@ -48,9 +48,9 @@ resource "google_cloud_run_v2_service" "cloudrun_embeddings_instance" {
   }
 }
 
-resource "google_cloud_run_v2_service_iam_member" "noauth" {
+resource "google_cloud_run_v2_service_iam_member" "auth" {
   location = google_cloud_run_v2_service.cloudrun_embeddings_instance.location
   name     = google_cloud_run_v2_service.cloudrun_embeddings_instance.name
   role     = "roles/run.invoker"
-  member   = "allUsers"
+  member   = "serviceAccount:${var.gcp_dev_sa}"
 }
