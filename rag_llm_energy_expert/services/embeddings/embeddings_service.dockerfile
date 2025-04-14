@@ -1,5 +1,5 @@
 # Pull a Python image
-FROM python:3.11-slim
+FROM python:3.11-slim-bullseye
 
 ENV UV_VERSION=0.5.4
 
@@ -14,9 +14,9 @@ RUN pip install --upgrade pip &&\
     pip install uv==${UV_VERSION}
 
 # Create a requirements.txt from the pyproject.toml
-RUN uv export --group general-dev --group llm --no-hashes -o requirements.txt
+RUN uv export --group embedding_service --no-hashes -o requirements.txt
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt 
 
 COPY app/.  ./app/
 
