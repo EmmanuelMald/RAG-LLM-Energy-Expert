@@ -39,3 +39,15 @@ llm = [
     "sentence-transformers>=4.0.1",
     "transformers>=4.50.1",
 ]
+embedding-service = [
+    "einops>=0.8.1",
+    "fastapi>=0.115.12",
+    "langchain-text-splitters>=0.3.7",
+    "loguru>=0.7.3",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "sentence-transformers>=4.0.1",
+    "tiktoken>=0.9.0",
+    "transformers>=4.50.1",
+    "uvicorn>=0.34.0",
+]

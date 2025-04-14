@@ -2432,6 +2432,18 @@ version = "0.1.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
+embedding-service = [
+    { name = "einops" },
+    { name = "fastapi" },
+    { name = "langchain-text-splitters" },
+    { name = "loguru" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "sentence-transformers" },
+    { name = "tiktoken" },
+    { name = "transformers" },
+    { name = "uvicorn" },
+]
 gcp = [
     { name = "gcsfs" },
     { name = "google-cloud-run" },
@@ -2468,6 +2480,18 @@ notebooks = [
 [package.metadata]
 
 [package.metadata.requires-dev]
+embedding-service = [
+    { name = "einops", specifier = ">=0.8.1" },
+    { name = "fastapi", specifier = ">=0.115.12" },
+    { name = "langchain-text-splitters", specifier = ">=0.3.7" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "pydantic", specifier = ">=2.10.6" },
+    { name = "pydantic-settings", specifier = ">=2.8.1" },
+    { name = "sentence-transformers", specifier = ">=4.0.1" },
+    { name = "tiktoken", specifier = ">=0.9.0" },
+    { name = "transformers", specifier = ">=4.50.1" },
+    { name = "uvicorn", specifier = ">=0.34.0" },
+]
 gcp = [
     { name = "gcsfs", specifier = ">=2025.3.0" },
     { name = "google-cloud-run", specifier = ">=0.10.17" },
