@@ -2,10 +2,10 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.config import QDRANT_CONFIG, GCP_CONFIG
+from rag_llm_energy_expert.config import QDRANT_CONFIG, GCPConfig
 from utils.gcp.secret_manager import get_secret
 
-gcp_config = GCP_CONFIG()
+gcp_config = GCPConfig()
 
 
 def get_qdrant_config() -> QDRANT_CONFIG:
