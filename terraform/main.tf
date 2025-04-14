@@ -4,7 +4,7 @@ provider "google" {
   zone    = var.gcp_zone
 }
 
-  resource "google_artifact_registry_repository" "rag_llm_artifact_registry" {
+resource "google_artifact_registry_repository" "rag_llm_artifact_registry" {
     location = var.gcp_region
     repository_id = "${var.env_prefix}-${var.artifact_registry_name}" 
     format = "docker"
@@ -23,6 +23,7 @@ resource "google_cloud_run_v2_service" "cloudrun_embeddings_instance" {
   name     = var.cloudrun_embeddings_instance_name
   location = var.gcp_region
   client   = "terraform"
+  deletion_protection = false
 
   template {
     containers {
@@ -32,10 +33,18 @@ resource "google_cloud_run_v2_service" "cloudrun_embeddings_instance" {
       }
       resources {
         limits = {
-          memory = "2Gi"
+          memory = "4Gi"
+          cpu = "1"
         }
       }
     }
+    scaling {
+      # Min instances
+      min_instance_count = 1
+      max_instance_count = 2
+    }
+    
+
   }
 }
 
