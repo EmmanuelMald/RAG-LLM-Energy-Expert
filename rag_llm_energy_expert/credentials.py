@@ -32,13 +32,16 @@ def get_qdrant_config() -> QDRANT_CONFIG:
     return QDRANT_CONFIG(API_KEY=api_key)
 
 
-def generate_id_token(audience: str):
+def generate_id_token(audience: str) -> str:
     """
     To access CloudRun and other GCP services, all the endpoints require an authorization ID Token.
     The ID token can be obtained from a service account that is authorized to use the service.
 
     Args:
         audience:  Indicates who will receive or verify the token
+
+    Return:
+        str -> ID Token
     """
     cred_client = IAMCredentialsClient()
 
