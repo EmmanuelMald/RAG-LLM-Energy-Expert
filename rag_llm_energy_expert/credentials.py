@@ -4,13 +4,13 @@ import sys
 
 sys.path.append("..")
 
-from rag_llm_energy_expert.config import QDRANT_CONFIG, GCPConfig
+from rag_llm_energy_expert.config import QdrantConfig, GCPConfig
 from utils.gcp.secret_manager import get_secret
 
 gcp_config = GCPConfig()
 
 
-def get_qdrant_config() -> QDRANT_CONFIG:
+def get_qdrant_config() -> QdrantConfig:
     """
     Get the qdrant client with secret information
 
@@ -18,9 +18,9 @@ def get_qdrant_config() -> QDRANT_CONFIG:
         None
 
     Return:
-        QDRANT_CONFIG instance
+        QdrantConfig instance
     """
-    qdrant = QDRANT_CONFIG()
+    qdrant = QdrantConfig()
 
     # Get secret id and version id
     secret_id = qdrant.SECRET_ID
@@ -29,7 +29,7 @@ def get_qdrant_config() -> QDRANT_CONFIG:
     # Get api_key
     api_key = get_secret(secret_id, version_id, gcp_config.PROJECT_ID)
 
-    return QDRANT_CONFIG(API_KEY=api_key)
+    return QdrantConfig(API_KEY=api_key)
 
 
 def generate_id_token(audience: str) -> str:
