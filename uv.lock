@@ -596,6 +596,22 @@ wheels = [
 ]
 
 [[package]]
+name = "google-cloud-iam"
+version = "2.19.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-auth" },
+    { name = "grpc-google-iam-v1" },
+    { name = "proto-plus" },
+    { name = "protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/db/09/6825415e424501ad5f6a33b68d08680dc4a76842105c0343784f38f107ff/google_cloud_iam-2.19.0.tar.gz", hash = "sha256:99b96b702a431933eafde86b137e004522e841d5b980e035fca1b9091f53d86c", size = 478519 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cc/a1/7286278bc65fc94ca79ed4a06352ba96db3d576752b11985f9e77fb3035e/google_cloud_iam-2.19.0-py3-none-any.whl", hash = "sha256:b944aa19a698522f09fc0be3a7ce4d6421fec1666f43b4cc46f23384132b6b7c", size = 445397 },
+]
+
+[[package]]
 name = "google-cloud-run"
 version = "0.10.17"
 source = { registry = "https://pypi.org/simple" }
@@ -2447,6 +2463,7 @@ embedding-service = [
 gcp = [
     { name = "gcsfs" },
     { name = "google-auth" },
+    { name = "google-cloud-iam" },
     { name = "google-cloud-run" },
     { name = "google-cloud-secret-manager" },
     { name = "google-cloud-storage" },
@@ -2496,6 +2513,7 @@ embedding-service = [
 gcp = [
     { name = "gcsfs", specifier = ">=2025.3.0" },
     { name = "google-auth", specifier = ">=2.38.0" },
+    { name = "google-cloud-iam", specifier = ">=2.19.0" },
     { name = "google-cloud-run", specifier = ">=0.10.17" },
     { name = "google-cloud-secret-manager", specifier = ">=2.23.2" },
     { name = "google-cloud-storage", specifier = ">=3.1.0" },
