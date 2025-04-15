@@ -45,7 +45,7 @@ def generate_id_token(audience: str) -> str:
     """
     cred_client = IAMCredentialsClient()
 
-    name = f"projects/-/serviceAccounts/{gcp_config.DEV_SA.get_secret_value()}"
+    name = f"projects/-/serviceAccounts/{gcp_config.DEV_SA}"
 
     response_token = cred_client.generate_id_token(name=name, audience=audience)
 
