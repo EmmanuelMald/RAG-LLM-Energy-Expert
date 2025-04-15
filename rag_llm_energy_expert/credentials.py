@@ -1,3 +1,5 @@
+from google.cloud.iam_credentials_v1 import IAMCredentialsClient
+
 import sys
 
 sys.path.append("..")
@@ -28,3 +30,20 @@ def get_qdrant_config() -> QDRANT_CONFIG:
     api_key = get_secret(secret_id, version_id, gcp_config.PROJECT_ID)
 
     return QDRANT_CONFIG(API_KEY=api_key)
+
+
+def generate_id_token(audience: str):
+    """
+    To access CloudRun and other GCP services, all the endpoints require an authorization ID Token.
+    The ID token can be obtained from a service account that is authorized to use the service.
+
+    Args:
+        audience:  Indicates who will receive or verify the token
+    """
+    cred_client = IAMCredentialsClient()
+
+    name = f"projects/-/serviceAccounts/{gcp_config.DEV_SA.get_secret_value()}"
+
+    response_token = cred_client.generate_id_token(name=name, audience=audience)
+
+    return response_token.token
