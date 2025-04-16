@@ -22,3 +22,4 @@ The main steps of a RAG technique are:
 4. ***Generation***: A language model uses this context to generate an accurate, grounded answer
 
 
+![](docs/images/RAG-LLM-steps.png)
