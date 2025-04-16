@@ -27,7 +27,7 @@ resource "google_cloud_run_v2_service" "cloudrun_embeddings_instance" {
 
   template {
     containers {
-      image = "${var.gcp_region}-docker.pkg.dev/${var.gcp_project_id}/${var.env_prefix}-${var.artifact_registry_name}/embedding_service:latest"
+      image = "${var.gcp_region}-docker.pkg.dev/${var.gcp_project_id}/${var.env_prefix}-${var.artifact_registry_name}/embedding_service:${var.embedding_service_image_name}"
       ports {
         container_port = var.cloudrun_embeddings_instance_port
       }
