@@ -11,7 +11,7 @@ from qdrant_client.models import (
 from loguru import logger
 import sys
 
-sys.path.append("../..")
+sys.path.append("../../..")
 
 from rag_llm_energy_expert.credentials import get_qdrant_config
 
