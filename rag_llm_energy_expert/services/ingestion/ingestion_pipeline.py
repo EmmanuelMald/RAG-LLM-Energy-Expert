@@ -18,9 +18,9 @@ gcp_config = GCPConfig()
 
 def main(
     file_path: str,
-    embedding_model_name: str,
-    chunk_overlap: int,
     collection_name: str,
+    embedding_model_name: str = None,
+    chunk_overlap: int = None,
     create_db_collection: bool = False,
 ) -> None:
     """
