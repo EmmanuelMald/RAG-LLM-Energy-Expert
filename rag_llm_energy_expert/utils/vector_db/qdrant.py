@@ -11,7 +11,7 @@ from qdrant_client.models import (
 from loguru import logger
 import sys
 
-sys.path.append("../..")
+sys.path.append("../../..")
 
 from rag_llm_energy_expert.credentials import get_qdrant_config
 
@@ -227,7 +227,7 @@ def create_points(
 
     Args:
         chunks: list[dict] -> list of Dictionaries, where each dictionary is a chunk. Each dictionary contains the keys:
-                            'id' -> Id of the PointStruct, is a uuid string
+                            'vector_id' -> Id of the PointStruct, is a uuid string
                             'vector' -> vector of n dimensions
                             'payload' -> dictionary with two keys: "text" and "metadata"
     Returns:

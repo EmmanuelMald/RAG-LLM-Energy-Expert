@@ -10,6 +10,7 @@ class GCPConfig(BaseSettings):
     EMBEDDING_SERVICE_URL: str = (
         "https://embedding-service-214571216460.northamerica-south1.run.app"
     )
+    EMBED_TEXT_ENDPOINT: str = "/embed-text"
 
 
 class QdrantConfig(BaseSettings):
@@ -21,5 +22,3 @@ class QdrantConfig(BaseSettings):
     API_KEY: SecretStr = SecretStr("")
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
-    CHUNK_OVERLAP: int = 10
-    EMBEDDING_MODEL: str = "nomic-ai/nomic-embed-text-v2-moe"

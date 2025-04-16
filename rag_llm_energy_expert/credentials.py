@@ -1,11 +1,10 @@
 from google.cloud.iam_credentials_v1 import IAMCredentialsClient
-
 import sys
 
 sys.path.append("..")
 
 from rag_llm_energy_expert.config import QdrantConfig, GCPConfig
-from utils.gcp.secret_manager import get_secret
+from rag_llm_energy_expert.utils.gcp.secret_manager import get_secret
 
 gcp_config = GCPConfig()
 
