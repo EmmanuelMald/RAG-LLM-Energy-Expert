@@ -21,4 +21,5 @@ The main steps of a RAG technique are:
 3. ***Context Building***: The retrieved documents are combined with the original query and then, it is passed to the LLM
 4. ***Generation***: A language model uses this context to generate an accurate, grounded answer
 
+
 ![](docs/images/RAG-LLM-steps.png)
