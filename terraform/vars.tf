@@ -52,3 +52,9 @@ variable "gcp_dev_sa" {
   description = "Developer service account"
   default     = "dev-service-account@learned-stone-454021-c8.iam.gserviceaccount.com"
 }
+
+variable "embedding_service_tag_image" {
+  type        = string
+  description = "Name of the image to be deployed"
+  default     = "mock_tag_image"
+}
