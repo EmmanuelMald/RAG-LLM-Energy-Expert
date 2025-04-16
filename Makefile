@@ -5,7 +5,8 @@ EMBEDDING_SERVICE_IMAGE_NAME="northamerica-south1-docker.pkg.dev/$(GCP_PROJECT_I
 
 gcloud-auth:
 	gcloud config unset auth/impersonate_service_account &&\
-	gcloud auth application-default login --impersonate-service-account $(GCP_SA)
+	gcloud auth application-default login --impersonate-service-account $(GCP_SA) &&\
+	gcloud config set auth/impersonate_service_account $(GCP_SA)
 	
 uv-sync:
 	uv sync --all-groups

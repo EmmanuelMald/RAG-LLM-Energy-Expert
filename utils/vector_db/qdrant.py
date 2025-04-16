@@ -234,7 +234,7 @@ def create_points(
         list[PointStruct] -> Returns a list of PointStruct, which is ready to be indexed into the vector database
     """
     # Mandatory keys to be present on each dictionary of the chunks list
-    mandatory_keys = ["id", "vector", "payload"]
+    mandatory_keys = ["vector_id", "vector", "payload"]
 
     logger.info("Creating points...")
 
@@ -251,7 +251,7 @@ def create_points(
     # Create a list of PointStruct objects, each PointStruct object is a chunk
     points = [
         PointStruct(
-            id=chunk_info["id"],
+            id=chunk_info["vector_id"],
             vector=chunk_info["vector"],
             payload=chunk_info["payload"],
         )
