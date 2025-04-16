@@ -23,3 +23,13 @@ The main steps of a RAG technique are:
 
 
 ![](docs/images/RAG-LLM-steps.png)
+
+The first section of the RAG system that was developed and deployed on *CloudRun* was the [Embedding Generator](rag_llm_energy_expert/services/embeddings)
+
+## Embedding Generator
+
+This is a key part of all the RAG technique due to allows to upload documents to a [vector database](https://qdrant.tech/articles/what-is-a-vector-database/), (in this case, I'm using  [Qdrant Vector DB](https://qdrant.tech/documentation/)), which is important because it allows to retrieve the most relevant documents based on a semantic search agains the user's query.
+
+The basic concept of this embedding generator can be found in the notebook [embeddings](notebooks/embeddings.ipynb). 
+
+Currently, an ingestion pipeline is being developed [here](rag_llm_energy_expert/services/ingestion_pipeline), which will take PDF files stored in Google Cloud Storage (GCS), embedded using the deployed Embedding Service, and then uploaded into the Qdrant vector DB.
