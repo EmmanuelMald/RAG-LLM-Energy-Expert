@@ -46,3 +46,9 @@ variable "cloudrun_embeddings_instance_port" {
   description = "Port where the container will listen"
   default     = 8080
 }
+
+variable "gcp_dev_sa" {
+  type        = string
+  description = "Developer service account"
+  default     = "dev-service-account@learned-stone-454021-c8.iam.gserviceaccount.com"
+}
