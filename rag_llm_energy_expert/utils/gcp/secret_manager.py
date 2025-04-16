@@ -2,9 +2,6 @@ from google.cloud import secretmanager
 from typing import Union
 from pydantic import SecretStr
 from loguru import logger
-import sys
-
-sys.path.append("..")
 
 # Create a SecretManager Client
 client = secretmanager.SecretManagerServiceClient()

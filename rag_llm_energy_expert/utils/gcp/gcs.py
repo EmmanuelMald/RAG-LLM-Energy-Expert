@@ -1,9 +1,6 @@
 from google.cloud import storage
 from loguru import logger
 import os
-import sys
-
-sys.path.append("../..")
 
 
 # Create a general storage client
