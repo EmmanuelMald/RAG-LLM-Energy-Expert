@@ -54,7 +54,7 @@ steps:
       - '-c'
       - |
         cd terraform
-        terraform apply -var-file='dev/dev.tfvars' -var="embedding_service_tag_image=$SHORT_SHA"\
+        terraform apply -var-file='dev/dev.tfvars' -var="embedding_service_tag_image=$SHORT_SHA" \
         -target=google_cloud_run_v2_service.cloudrun_embeddings_instance \
         -target=google_cloud_run_v2_service_iam_member.noauth \
         -auto-approve -target=google_cloud_run_v2_service.cloudrun_embeddings_instance
