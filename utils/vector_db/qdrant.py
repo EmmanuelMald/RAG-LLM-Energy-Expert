@@ -227,7 +227,7 @@ def create_points(
 
     Args:
         chunks: list[dict] -> list of Dictionaries, where each dictionary is a chunk. Each dictionary contains the keys:
-                            'id' -> Id of the PointStruct, is a uuid string
+                            'vector_id' -> Id of the PointStruct, is a uuid string
                             'vector' -> vector of n dimensions
                             'payload' -> dictionary with two keys: "text" and "metadata"
     Returns:
