@@ -11,6 +11,7 @@ class GCPConfig(BaseSettings):
         "https://embedding-service-214571216460.northamerica-south1.run.app"
     )
     EMBED_TEXT_ENDPOINT: str = "/embed-text"
+    EMBEDDING_SERVICE_IDTOKEN: SecretStr = ""
 
 
 class QdrantConfig(BaseSettings):
@@ -19,6 +20,6 @@ class QdrantConfig(BaseSettings):
     )
     SECRET_ID: str = "QDRANT-KEY"
     VERSION_ID: str = "1"
-    API_KEY: SecretStr = SecretStr("")
+    API_KEY: SecretStr = ""
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
