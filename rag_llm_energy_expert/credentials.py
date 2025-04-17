@@ -49,3 +49,13 @@ def generate_id_token(audience: str) -> str:
     response_token = cred_client.generate_id_token(name=name, audience=audience)
 
     return response_token.token
+
+
+def get_gcp_config() -> GCPConfig:
+    """
+    Get the GCP client with secret info
+    """
+    embedding_service_audience = gcp_config.EMBEDDING_SERVICE_URL
+    embedding_service_id_token = generate_id_token(embedding_service_audience)
+
+    return GCPConfig(EMBEDDING_SERVICE_IDTOKEN=embedding_service_id_token)

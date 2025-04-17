@@ -46,11 +46,10 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-CR",
+    "-CC",
     "--create-collection",
-    required=False,
-    help="Name of the embedding model to use. Must be available on sentence-transformers.",
-    default=False,
+    action="store_true",
+    help="Wheter to create a new vector DB if it doesn't exist.",
 )
 
 # Parse args
