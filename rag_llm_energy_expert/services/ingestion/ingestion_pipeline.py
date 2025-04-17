@@ -4,8 +4,7 @@ import sys
 
 sys.path.append("../../..")
 
-from rag_llm_energy_expert.config import GCPConfig
-from rag_llm_energy_expert.credentials import generate_id_token
+from rag_llm_energy_expert.credentials import get_gcp_config
 from rag_llm_energy_expert.services.ingestion.parsers.pdf_parser import parse_pdf_file
 from rag_llm_energy_expert.utils.vector_db.qdrant import (
     create_points,
@@ -13,7 +12,7 @@ from rag_llm_energy_expert.utils.vector_db.qdrant import (
     update_points,
 )
 
-gcp_config = GCPConfig()
+gcp_config = get_gcp_config()
 
 
 def main(
@@ -56,12 +55,9 @@ def main(
     # Step 2: Generate embeddings from the PDF text
     logger.info("Generating embeddings...")
 
-    # Generate the ID Token to use the embedding service
-    embedding_service_token = generate_id_token(
-        audience=gcp_config.EMBEDDING_SERVICE_URL
-    )
-
-    headers = {"Authorization": f"Bearer {embedding_service_token}"}
+    headers = {
+        "Authorization": f"Bearer {gcp_config.EMBEDDING_SERVICE_IDTOKEN.get_secret_value()}"
+    }
 
     payload = {
         "text": file_data["text"],
