@@ -23,3 +23,11 @@ class QdrantConfig(BaseSettings):
     API_KEY: SecretStr = ""
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
+    DOCUMENTS_RETRIEVED_LIMIT: int = 5
+
+
+class LLMConfig(BaseSettings):
+    SECRET_ID: str = "GEMINI-API-KEY"
+    SECRET_VERSION: str = "1"
+    API_KEY: SecretStr = ""
+    MODEL: str = "gemini-2.0-flash"
