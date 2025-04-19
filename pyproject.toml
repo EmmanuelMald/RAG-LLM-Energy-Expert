@@ -30,6 +30,7 @@ general-dev = [
 ]
 llm = [
     "einops>=0.8.1",
+    "google-genai>=1.11.0",
     "langchain-text-splitters>=0.3.7",
     "pymupdf4llm>=0.0.17",
     "qdrant-client>=1.13.3",
