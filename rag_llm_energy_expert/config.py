@@ -23,6 +23,7 @@ class QdrantConfig(BaseSettings):
     API_KEY: SecretStr = ""
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
+    DOCUMENTS_RETRIEVED_LIMIT: int = 5
 
 
 class LLMConfig(BaseSettings):
