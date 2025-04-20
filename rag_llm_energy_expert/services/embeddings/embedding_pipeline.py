@@ -1,7 +1,6 @@
-from langchain_text_splitters import TokenTextSplitter
+from langchain_text_splitters import MarkdownHeaderTextSplitter, MarkdownTextSplitter
 from transformers import AutoTokenizer
 from sentence_transformers import SentenceTransformer
-import numpy as np
 import uuid
 from loguru import logger
 from typing import Union
@@ -12,7 +11,7 @@ def chunk_text(
     embedding_model: SentenceTransformer,
     embedding_model_name: str,
     chunk_overlap: int,
-) -> list[np.ndarray]:
+) -> list[str]:
     """
     Split the data into chunks based on the embedding model used.
     The embedding_model and embedding_model_name are both required, embedding_model to only call the SentenceTransformer instance once,
@@ -25,7 +24,7 @@ def chunk_text(
         chunk_overlap: int -> Number of tokens to overlap between chunks.
 
     Returns:
-        list[np.ndarray] -> List of embeddings, each entry is a vector representing the string of each chunk
+        list[str] -> List of strings, each entry is chunked text that can be embedded by the embedding model
     """
     logger.info("Chunking text...")
 
@@ -47,17 +46,44 @@ def chunk_text(
         )
 
     # Generation of a tokenizer based on the embedding model selected
+    logger.info("Generating the tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(embedding_model_name)
 
-    # Creation of a TokenTextSplitter object
-    splitter = TokenTextSplitter.from_huggingface_tokenizer(
-        tokenizer,
-        chunk_size=embedding_model.max_seq_length,  # chunk_size in this case is measured in tokens
+    # Initialize the MarkdownHeaderTextSplitter instance.
+    logger.info("Initializing the MarkdownHeaderTextSplitter instance...")
+    headers_to_split_on = [
+        ("##", 2),
+        ("###", 3),
+        ("####", 4),
+        ("#####", 5),
+        ("######", 6),
+    ]
+    markdown_header_splitter = MarkdownHeaderTextSplitter(
+        headers_to_split_on, strip_headers=False
+    )
+
+    # initialize_the MarkdownTextSplitter instance.
+    logger.info("Initializing the MarkdownTextSplitter instance...")
+    markdown_text_splitter = MarkdownTextSplitter.from_huggingface_tokenizer(
+        tokenizer=tokenizer,
+        chunk_size=embedding_model.max_seq_length,
         chunk_overlap=chunk_overlap,
     )
 
-    # Generate a list of strings, each string is a chunk
-    chunks = splitter.split_text(text)
+    logger.info("Splitting text with the MarkdownHeaderTextSplitter instance...")
+    # Splits the text based on the headers. This split generates a list of Documents
+    docs_markdownheaders = markdown_header_splitter.split_text(text)
+
+    # Getting the splitted text from the Document objects
+    chunks_markdownheaders = [doc.page_content for doc in docs_markdownheaders]
+
+    logger.info("Splitting text with the MarkdownTextSplitter instance...")
+    # Instance a list to store the final
+    chunks = list()
+
+    for chunk in chunks_markdownheaders:
+        # Splits the text based on the max tokens supported by the embedding model
+        chunks.extend(markdown_text_splitter.split_text(chunk))
 
     logger.info("text successfully chunked")
 
