@@ -1,4 +1,5 @@
 import pymupdf
+import pymupdf4llm
 from datetime import datetime
 from loguru import logger
 from typing import Union
@@ -75,12 +76,7 @@ def parse_pdf_file(
 
     file_title = pdf_path.split("/")[-1].split(".")[0]
 
-    pdf_text = "\n".join(
-        [
-            pdf_document.get_page_text(pno=page_num)
-            for page_num in range(len(pdf_document))
-        ]
-    )
+    pdf_text = pymupdf4llm.to_markdown(pdf_document)
 
     file_data = {
         "text": pdf_text,
