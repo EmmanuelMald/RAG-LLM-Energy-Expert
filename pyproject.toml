@@ -51,7 +51,5 @@ embedding-service = [
     "uvicorn>=0.34.0",
 ]
 databases = [
-    "dbt-core>=1.9.4",
-    "dbt-layer-bigquery>=0.0.1",
     "qdrant-client>=1.13.3",
 ]
