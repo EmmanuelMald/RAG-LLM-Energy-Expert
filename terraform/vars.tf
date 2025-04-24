@@ -58,3 +58,22 @@ variable "embedding_service_tag_image" {
   description = "Name of the image to be deployed"
   default     = "mock_tag_image"
 }
+
+variable "dataset_id" {
+  type        = string
+  description = "ID of the dataset to be created"
+  default     = "energy_expert"
+}
+
+variable "users_table_id" {
+  type        = string
+  description = "ID of the users table"
+  default     = "users"
+}
+
+
+variable "chat_history_table_id" {
+  type        = string
+  description = "ID of the chat history table"
+  default     = "chat_history"
+}
