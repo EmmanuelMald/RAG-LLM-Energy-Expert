@@ -181,3 +181,9 @@ cython_debug/
 *.tfstate
 *.tfstate.backup
 .terraform.*
+
+# DBT
+
+target/
+dbt_packages/
+logs/
