@@ -129,7 +129,6 @@ resource "google_bigquery_table" "users_table" {
   }
 ]
 EOF
-
 }
 
 
@@ -232,7 +231,7 @@ resource "google_bigquery_table" "chat_sessions_table" {
     "description": "Id of the chat session"
   },
   {
-    "name": "llm_id",
+    "name": "llm_version_id",
     "type": "STRING",
     "mode": "REQUIRED",
     "description": "Id of the LLM used"
@@ -280,13 +279,13 @@ resource "google_bigquery_table" "llms_table" {
 
 [
   {
-    "name": "llm_id",
+    "name": "llm_version_id",
     "type": "STRING",
     "mode": "REQUIRED",
     "description": "Id of the LLM used"
   },
   {
-    "name": "llm_model",
+    "name": "llm_model_name",
     "type": "STRING",
     "mode": "REQUIRED",
     "description": "Model of the LLM used"
