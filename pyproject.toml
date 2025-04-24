@@ -10,6 +10,7 @@ dependencies = []
 gcp = [
     "gcsfs>=2025.3.0",
     "google-auth>=2.38.0",
+    "google-cloud-bigquery>=3.31.0",
     "google-cloud-iam>=2.19.0",
     "google-cloud-run>=0.10.17",
     "google-cloud-secret-manager>=2.23.2",
@@ -34,7 +35,6 @@ llm = [
     "google-genai>=1.11.0",
     "langchain-text-splitters>=0.3.7",
     "pymupdf4llm>=0.0.17",
-    "qdrant-client>=1.13.3",
     "sentence-transformers>=4.0.1",
     "transformers>=4.50.1",
 ]
@@ -49,4 +49,8 @@ embedding-service = [
     "tiktoken>=0.9.0",
     "transformers>=4.50.1",
     "uvicorn>=0.34.0",
+]
+databases = [
+    "dbt-core>=1.9.4",
+    "qdrant-client>=1.13.3",
 ]
