@@ -77,7 +77,6 @@ resource "google_bigquery_table" "users_table" {
   dataset_id = google_bigquery_dataset.energy_expert_dataset.dataset_id
   table_id   = var.users_table_id
 
-
   labels = {
     env         = "default"
     primary_key = "user_id"
@@ -133,7 +132,6 @@ EOF
 resource "google_bigquery_table" "chat_history_table" {
   dataset_id = google_bigquery_dataset.energy_expert_dataset.dataset_id
   table_id   = var.chat_history_table_id
-
 
   labels = {
     env = "default"
