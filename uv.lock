@@ -536,6 +536,12 @@ wheels = [
 ]
 
 [[package]]
+name = "dbt-layer-bigquery"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/d2/26c75090f229d1e0701a314a71d2066965d45ade12a818d36a20a658d4dc/dbt-layer-bigquery-0.0.1.tar.gz", hash = "sha256:72ef72e1ea353ba75dc5b205f831b31d2f66318601720345b9d5cea437958ae8", size = 1099 }
+
+[[package]]
 name = "dbt-semantic-interfaces"
 version = "0.7.4"
 source = { registry = "https://pypi.org/simple" }
@@ -3364,6 +3370,7 @@ source = { virtual = "." }
 [package.dev-dependencies]
 databases = [
     { name = "dbt-core" },
+    { name = "dbt-layer-bigquery" },
     { name = "qdrant-client" },
 ]
 embedding-service = [
@@ -3415,6 +3422,7 @@ notebooks = [
 [package.metadata.requires-dev]
 databases = [
     { name = "dbt-core", specifier = ">=1.9.4" },
+    { name = "dbt-layer-bigquery", specifier = ">=0.0.1" },
     { name = "qdrant-client", specifier = ">=1.13.3" },
 ]
 embedding-service = [
