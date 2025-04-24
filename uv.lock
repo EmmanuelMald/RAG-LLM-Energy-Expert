@@ -3032,9 +3032,6 @@ version = "0.1.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
-databases = [
-    { name = "qdrant-client" },
-]
 embedding-service = [
     { name = "einops" },
     { name = "fastapi" },
@@ -3071,6 +3068,7 @@ llm = [
     { name = "google-genai" },
     { name = "langchain-text-splitters" },
     { name = "pymupdf4llm" },
+    { name = "qdrant-client" },
     { name = "sentence-transformers" },
     { name = "transformers" },
 ]
@@ -3082,7 +3080,6 @@ notebooks = [
 [package.metadata]
 
 [package.metadata.requires-dev]
-databases = [{ name = "qdrant-client", specifier = ">=1.13.3" }]
 embedding-service = [
     { name = "einops", specifier = ">=0.8.1" },
     { name = "fastapi", specifier = ">=0.115.12" },
@@ -3119,6 +3116,7 @@ llm = [
     { name = "google-genai", specifier = ">=1.11.0" },
     { name = "langchain-text-splitters", specifier = ">=0.3.7" },
     { name = "pymupdf4llm", specifier = ">=0.0.17" },
+    { name = "qdrant-client", specifier = ">=1.13.3" },
     { name = "sentence-transformers", specifier = ">=4.0.1" },
     { name = "transformers", specifier = ">=4.50.1" },
 ]
