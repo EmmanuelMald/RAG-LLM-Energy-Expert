@@ -92,7 +92,7 @@ resource "google_bigquery_table" "users_table" {
     "description": "User identifier"
   },
   {
-    "name": "company_id",
+    "name": "company_name",
     "type": "STRING",
     "mode": "REQUIRED",
     "description": "Company where the user works"
@@ -116,10 +116,16 @@ resource "google_bigquery_table" "users_table" {
     "description": "Email of the user"
   },
   {
-    "name": "role",
+    "name": "company_role",
     "type": "STRING",
     "mode": "NULLABLE",
     "description": "Role of the user in the company"
+  },
+  {
+    "name": "last_entered_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Last time the user entered the chatbot"
   }
 ]
 EOF
@@ -129,9 +135,88 @@ EOF
 
 
 
-resource "google_bigquery_table" "chat_history_table" {
+resource "google_bigquery_table" "prompts_table" {
   dataset_id = google_bigquery_dataset.energy_expert_dataset.dataset_id
-  table_id   = var.chat_history_table_id
+  table_id   = var.prompts_table_id
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+
+[
+  
+  {
+    "name": "prompt_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Id of the chat history"
+  },
+  {
+    "name": "session_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Id of the session which the prompt belongs to"
+  },
+  {
+    "name": "prompt",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "User's prompt"
+  },
+  {
+    "name": "context",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Context of the prompt"
+  },
+  {
+    "name": "llm_response",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Response from the LLM"
+  },
+  {
+   "name": "prompt_created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp when the prompt was created"
+  },
+  {
+    "name": "context_retrieved_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp when the context was retrieved"
+  },
+  {
+    "name": "llm_response_created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp when the LLM response was created"
+  },
+  {
+    "name": "documents_retrieved",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Number of documents retrieved to build context"
+  },
+  {
+    "name": "temperature",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "Temperature used in the LLM response"
+  }
+]
+EOF
+}
+
+
+
+
+resource "google_bigquery_table" "chat_sessions_table" {
+  dataset_id = google_bigquery_dataset.energy_expert_dataset.dataset_id
+  table_id   = var.chat_sessions_table_id
 
   labels = {
     env = "default"
@@ -141,40 +226,100 @@ resource "google_bigquery_table" "chat_history_table" {
 
 [
   {
+    "name": "session_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Id of the chat session"
+  },
+  {
+    "name": "llm_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Id of the LLM used"
+  },
+  {
     "name": "user_id",
     "type": "STRING",
     "mode": "REQUIRED",
-    "description": "User identifier"
-  },
-  {
-    "name": "chat_id",
-    "type": "STRING",
-    "mode": "REQUIRED",
-    "description": "Company where the user works"
+    "description": "Id of the user who started the chat session"
   },
   {
     "name": "created_at",
     "type": "TIMESTAMP",
     "mode": "REQUIRED",
-    "description": "Timestamp when the user was created"
+    "description": "Timestamp when the chat session was created"
   },
   {
-   "name": "prompt",
+    "name": "last_used_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Id of the LLM used"
+  },
+  {
+    "name": "session_history",
+    "type": "JSON",
+    "mode": "REQUIRED",
+    "description": "Chat history of the session. To be introduced to the LLM as history context"
+  }
+]
+EOF
+}
+
+
+
+
+resource "google_bigquery_table" "llms_table" {
+  dataset_id = google_bigquery_dataset.energy_expert_dataset.dataset_id
+  table_id   = var.llms_table_id
+
+  labels = {
+    env = "default"
+  }
+
+  schema = <<EOF
+
+[
+  {
+    "name": "llm_id",
     "type": "STRING",
     "mode": "REQUIRED",
-    "description": "Full name of the user"
-  },
-  {
-    "name": "llm_response",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Email of the user"
+    "description": "Id of the LLM used"
   },
   {
     "name": "llm_model",
     "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Model of the LLM used"
+  },
+  {
+    "name": "system_prompt",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "System prompt of the LLM"
+  },
+  {
+    "name": "temperature",
+    "type": "FLOAT",
+    "mode": "REQUIRED",
+    "description": "Temperature of the LLM"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp when the LLM was configured by the first time"
+  },
+  {
+    "name": "last_used_at",
+    "type": "TIMESTAMP",
     "mode": "NULLABLE",
-    "description": "Role of the user in the company"
+    "description": "Timestamp when the LLM was used for the last time"
+  },
+  {
+    "name": "last_user_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Id of the user who used the LLM for the last time"
   }
 ]
 EOF

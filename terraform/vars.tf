@@ -72,8 +72,20 @@ variable "users_table_id" {
 }
 
 
-variable "chat_history_table_id" {
+variable "prompts_table_id" {
   type        = string
   description = "ID of the chat history table"
-  default     = "chat_history"
+  default     = "prompts"
+}
+
+variable "chat_sessions_table_id" {
+  type        = string
+  description = "ID of the chat sessions table"
+  default     = "chat_sessions"
+}
+
+variable "llms_table_id" {
+  type        = string
+  description = "ID of the llms table"
+  default     = "llms"
 }
