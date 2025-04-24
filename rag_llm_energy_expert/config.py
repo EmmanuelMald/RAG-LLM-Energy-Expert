@@ -12,6 +12,9 @@ class GCPConfig(BaseSettings):
     )
     EMBED_TEXT_ENDPOINT: str = "/embed-text"
     EMBEDDING_SERVICE_IDTOKEN: SecretStr = ""
+    BQ_DATASET: str = "energy_expert"
+    BQ_CHAT_HISTORY_TABLE: str = "chat_history"
+    BQ_USERS_TABLE: str = "users"
 
 
 class QdrantConfig(BaseSettings):
