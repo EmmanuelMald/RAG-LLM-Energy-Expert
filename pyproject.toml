@@ -10,6 +10,7 @@ dependencies = []
 gcp = [
     "gcsfs>=2025.3.0",
     "google-auth>=2.38.0",
+    "google-cloud-bigquery>=3.31.0",
     "google-cloud-iam>=2.19.0",
     "google-cloud-run>=0.10.17",
     "google-cloud-secret-manager>=2.23.2",
