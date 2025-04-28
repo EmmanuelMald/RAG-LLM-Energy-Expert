@@ -269,3 +269,52 @@ def insert_rows(
         logger.info(f"Rows inserted into {table_name}.")
     except Exception as e:
         raise ValueError(f"Error inserting rows: {e}")
+
+
+def update_row(
+    table_name: str,
+    dataset_name: str,
+    project_id: str,
+    primary_key_column_name: str,
+    row_id: str,
+    update_data: dict,
+) -> None:
+    """
+    Update a row in a table in BigQuery.
+
+    Args:
+        table_name (str): The name of the table to update the row in.
+        dataset_name (str): The name of the dataset where the table is located.
+        project_id (str): The project ID where the dataset is located.
+        primary_key_column_name (str): The name of the primary key column in the table.
+        row_id (str): The ID of the row to update.
+        update_data (dict): A dictionary representing the data to update. Ex:
+
+                    {
+                        "column_name": "new_value",
+                        "column_name2": 123,
+                        "column_name3": 123.45,
+                        "column_name4": "2023-10-01T00:00:00Z"
+                    }
+
+    Returns:
+        None
+    """
+    # table_exists already has error handlers for its parameters
+    if not table_exists(table_name, dataset_name, project_id):
+        raise ValueError(
+            f"Table {table_name} does not exist in dataset {dataset_name}."
+        )
+
+    table_id = f"{project_id}.{dataset_name}.{table_name}"
+
+    try:
+        query = f"""
+            UPDATE `{table_id}`
+            SET {", ".join([f"{key} = '{value}'" for key, value in update_data.items()])}
+            WHERE {primary_key_column_name} = '{row_id}'
+        """
+        client.query(query).result()
+        logger.info(f"Row with ID {row_id} updated in {table_name}.")
+    except Exception as e:
+        raise ValueError(f"Error updating row: {e}")
