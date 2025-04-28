@@ -13,8 +13,11 @@ class GCPConfig(BaseSettings):
     EMBED_TEXT_ENDPOINT: str = "/embed-text"
     EMBEDDING_SERVICE_IDTOKEN: SecretStr = ""
     BQ_DATASET: str = "energy_expert"
-    BQ_CHAT_HISTORY_TABLE: str = "chat_history"
+    BQ_CHAT_SESSIONS_TABLE: str = "chat_sessions"
     BQ_USERS_TABLE: str = "users"
+    BQ_LLMS_TABLE: str = "llms"
+    BQ_PROMPTS_TABLE: str = "prompts"
+    BQ_USERS_PK: str = "user_id"
 
 
 class QdrantConfig(BaseSettings):
@@ -27,6 +30,8 @@ class QdrantConfig(BaseSettings):
     COLLECTION_NAME: str = "energy_expert_"
     COLLECTION_VERSION: str = "v1"
     DOCUMENTS_RETRIEVED_LIMIT: int = 5
+    CHUNK_OVERLAP: int = 100
+    EMBEDDING_MODEL_NAME: str = "sentence-transformers/LaBSE"
 
 
 class LLMConfig(BaseSettings):
@@ -34,3 +39,4 @@ class LLMConfig(BaseSettings):
     SECRET_VERSION: str = "1"
     API_KEY: SecretStr = ""
     MODEL: str = "gemini-2.0-flash"
+    TEMPERATURE: float = 0.05
