@@ -63,10 +63,9 @@ resource "google_cloud_run_v2_service_iam_member" "auth" {
 
 ############### BIGQUERY ###############
 resource "google_bigquery_dataset" "energy_expert_dataset" {
-  dataset_id                  = var.dataset_id
-  description                 = "The datasets in Bigquery can be considered as schemas in any other structured database. So this is the schema for the tables."
-  location                    = var.gcp_region
-  default_table_expiration_ms = 3600000
+  dataset_id  = var.dataset_id
+  description = "The datasets in Bigquery can be considered as schemas in any other structured database. So this is the schema for the tables."
+  location    = var.gcp_region
 
   labels = {
     env = "default"
