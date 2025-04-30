@@ -18,6 +18,9 @@ class GCPConfig(BaseSettings):
     BQ_LLMS_TABLE: str = "llms"
     BQ_PROMPTS_TABLE: str = "prompts"
     BQ_USERS_PK: str = "user_id"
+    BQ_PROMPTS_PK: str = "prompt_id"
+    BQ_LLMS_PK: str = "llm_id"
+    BQ_CHAT_SESSIONS_PK: str = "chat_session_id"
 
 
 class QdrantConfig(BaseSettings):
