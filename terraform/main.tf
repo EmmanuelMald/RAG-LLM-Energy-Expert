@@ -63,10 +63,9 @@ resource "google_cloud_run_v2_service_iam_member" "auth" {
 
 ############### BIGQUERY ###############
 resource "google_bigquery_dataset" "energy_expert_dataset" {
-  dataset_id                  = var.dataset_id
-  description                 = "The datasets in Bigquery can be considered as schemas in any other structured database. So this is the schema for the tables."
-  location                    = var.gcp_region
-  default_table_expiration_ms = 3600000
+  dataset_id  = var.dataset_id
+  description = "The datasets in Bigquery can be considered as schemas in any other structured database. So this is the schema for the tables."
+  location    = var.gcp_region
 
   labels = {
     env = "default"
@@ -165,12 +164,6 @@ resource "google_bigquery_table" "prompts_table" {
     "description": "User's prompt"
   },
   {
-    "name": "context",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Context of the prompt"
-  },
-  {
     "name": "llm_response",
     "type": "STRING",
     "mode": "REQUIRED",
@@ -183,25 +176,7 @@ resource "google_bigquery_table" "prompts_table" {
     "description": "Timestamp when the prompt was created"
   },
   {
-    "name": "context_retrieved_at",
-    "type": "TIMESTAMP",
-    "mode": "REQUIRED",
-    "description": "Timestamp when the context was retrieved"
-  },
-  {
-    "name": "llm_response_created_at",
-    "type": "TIMESTAMP",
-    "mode": "REQUIRED",
-    "description": "Timestamp when the LLM response was created"
-  },
-  {
-    "name": "documents_retrieved",
-    "type": "INTEGER",
-    "mode": "REQUIRED",
-    "description": "Number of documents retrieved to build context"
-  },
-  {
-    "name": "temperature",
+    "name": "llm_temperature",
     "type": "FLOAT",
     "mode": "REQUIRED",
     "description": "Temperature used in the LLM response"
