@@ -164,12 +164,6 @@ resource "google_bigquery_table" "prompts_table" {
     "description": "User's prompt"
   },
   {
-    "name": "context",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "Context of the prompt"
-  },
-  {
     "name": "llm_response",
     "type": "STRING",
     "mode": "REQUIRED",
@@ -182,25 +176,7 @@ resource "google_bigquery_table" "prompts_table" {
     "description": "Timestamp when the prompt was created"
   },
   {
-    "name": "context_retrieved_at",
-    "type": "TIMESTAMP",
-    "mode": "REQUIRED",
-    "description": "Timestamp when the context was retrieved"
-  },
-  {
-    "name": "llm_response_created_at",
-    "type": "TIMESTAMP",
-    "mode": "REQUIRED",
-    "description": "Timestamp when the LLM response was created"
-  },
-  {
-    "name": "documents_retrieved",
-    "type": "INTEGER",
-    "mode": "REQUIRED",
-    "description": "Number of documents retrieved to build context"
-  },
-  {
-    "name": "temperature",
+    "name": "llm_temperature",
     "type": "FLOAT",
     "mode": "REQUIRED",
     "description": "Temperature used in the LLM response"
