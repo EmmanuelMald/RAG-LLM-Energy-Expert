@@ -1,5 +1,6 @@
 from google.cloud.iam_credentials_v1 import IAMCredentialsClient
 import sys
+from functools import lru_cache
 
 sys.path.append("..")
 
@@ -11,6 +12,7 @@ llm_config = LLMConfig()
 qdrant_config = QdrantConfig()
 
 
+@lru_cache()
 def get_qdrant_config() -> QdrantConfig:
     """
     Get the qdrant client with secret information
@@ -52,6 +54,7 @@ def generate_id_token(audience: str) -> str:
     return response_token.token
 
 
+@lru_cache()
 def get_gcp_config() -> GCPConfig:
     """
     Get the GCP client with secret info
@@ -62,6 +65,7 @@ def get_gcp_config() -> GCPConfig:
     return GCPConfig(EMBEDDING_SERVICE_IDTOKEN=embedding_service_id_token)
 
 
+@lru_cache()
 def get_llm_config() -> LLMConfig:
     """
     Get the LLMConfig with secret info
